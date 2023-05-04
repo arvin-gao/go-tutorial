@@ -89,3 +89,24 @@ func TestSwitch(t *testing.T) {
 		println("req == enum2")
 	}
 }
+
+func TestConditionVariable(t *testing.T) {
+	var a = 1
+	println("a =", a)
+	if a := 2; a == 2 {
+		println(a)
+		a = 3
+		println(a)
+	}
+	println("a =", a)
+
+	if a = 4; a == 4 {
+		pass()
+	}
+	println("a =", a)
+
+	if a = 5; a == 5 {
+		a = 6
+	}
+	println("a =", a)
+}

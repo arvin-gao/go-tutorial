@@ -21,3 +21,33 @@ func TestTemp(t *testing.T) {
 	}
 	fmt.Println(a)
 }
+
+type Obj struct {
+	Name string
+}
+
+func (a *Obj) printObjWithPointer() {
+	fmt.Printf("*a: %p\n", a)
+}
+
+func (a Obj) printObjWithoutPointer() {
+	fmt.Printf("a: %p\n", &a)
+}
+
+func TestTemp2(t *testing.T) {
+	var v Obj
+	fmt.Printf("v: %p\n", &v)
+	v.printObjWithPointer()
+	v.printObjWithoutPointer()
+	v.printObjWithoutPointer()
+}
+
+func TestTemp3(t *testing.T) {
+	var values = []int{1, 2, 3, 4, 5}
+	for ix := range values {
+		go func(val int) {
+			fmt.Print(val, " ")
+		}(values[ix])
+	}
+
+}

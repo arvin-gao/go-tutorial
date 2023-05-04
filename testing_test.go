@@ -17,5 +17,3 @@ func TestSum(t *testing.T) {
 		}
 	}
 }
-
-var a2 = "G"

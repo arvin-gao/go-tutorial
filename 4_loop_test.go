@@ -31,8 +31,8 @@ func TestLoopArrayAndSlice(t *testing.T) {
 	nums := []int{1, 2, 3}
 	for index, value := range nums {
 		println(index, value)
-		printPtr(&nums[index])
-		printPtr(&value)
+		pPtr(&nums[index])
+		pPtr(&value)
 	}
 	for index := range nums {
 		println(index)

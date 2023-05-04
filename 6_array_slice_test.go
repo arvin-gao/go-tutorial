@@ -212,31 +212,65 @@ func TestSliceExample3(t *testing.T) {
 func TestSliceExample4(t *testing.T) {
 	s := []int{1}
 	s = append(s, 2)
-	printPtr(s)
+	pCode("s := []int{1}")
+	pCode("s = append(s, 2)")
+	pPtr(s)
+
 	s = append(s, 3)
-	printPtr(s)
+	pCode("s = append(s, 3)")
+	pPtr(s)
+
 	x := append(s, 11)
+	pCode("x := append(s, 11)")
+	pfTree("x = %v", x)
+
 	y := append(s, 22)
-	fmt.Println("s:", s)
-	fmt.Println("x:", x)
-	fmt.Println("y:", y)
+	pCode("y := append(s, 22)")
+	pfTree("y = %v", y)
+
+	z := []int{2: 5, 6, 0: 7}
+	pCode("z := []int{2: 5, 6, 0: 7}")
+	pfTree("z = %v", z)
 
 	y[len(y)-1] = 23
-	fmt.Println("s:", s)
-	fmt.Println("x:", x)
-	fmt.Println("y:", y)
+	pCode("y[len(y)-1] = 23")
+	pfTree("s = %v", s)
+	pfTree("x = %v", x)
+	pfTree("y = %v", y)
+	pCode("s[0] = 0")
 	s[0] = 0
-	printPtr(s)
+	print("s: ")
+	pPtr(s)
+	pCode("s = append(s, 4)")
 	s = append(s, 4)
-	printPtr(s)
+	print("s: ")
+	pPtr(s)
 	fmt.Println("s:", s)
 	fmt.Println("x:", x)
 	fmt.Println("y:", y)
+	pCode("s = append(s, 5)")
 	s = append(s, 5)
-	printPtr(s)
+	print("s: ")
+	pPtr(s)
 	// 總結：當 slice 容量還夠時，slice 的 struct 及 array 地址並不會變
 }
 
-func printPtr(v any) {
-	fmt.Printf("%p\n", v)
+func TestSliceExample5(t *testing.T) {
+	a := [...]int{0, 1, 2, 3}
+	x := a[:1]
+	y := a[2:]
+	x = append(x, y...)
+	x = append(x, y...)
+	fmt.Println(a, x)
+}
+
+func TestSliceExample6(t *testing.T) {
+	var x = []string{"A", "B", "C"}
+
+	for i, s := range x {
+		print(i, s, ",")
+		x[i+1] = "M"
+		x = append(x, "Z")
+		x[i+1] = "Z"
+	}
 }

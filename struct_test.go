@@ -82,5 +82,25 @@ func TestStructSize(t *testing.T) {
 	fmt.Println(unsafe.Sizeof(A{}))
 	fmt.Println(unsafe.Sizeof(B{}))
 	fmt.Println(unsafe.Sizeof(C{}))
+}
 
+func TestDuplicatedField(t *testing.T) {
+	type A struct{ a int }
+	type B struct{ a, b int }
+
+	type C struct {
+		A
+		B
+		b float32
+	}
+	var c C
+	c.A.a = 1
+	c.B.a = 1
+	fmt.Println(c)
+	// fmt.Println(c.a) // error!
+
+	c.b = 2
+	fmt.Println(c.b)
+	c.b = 1.1
+	fmt.Println(c.b)
 }

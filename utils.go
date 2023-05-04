@@ -10,14 +10,23 @@ func pass(v ...any) {
 
 func pTitle(title string) {
 	mark := "="
-	maxCharLen := 50
-	tLen := len(title)
-	if tLen > maxCharLen {
+	maxCharLen := 40
+
+	var totalLen int
+	for _, v := range title {
+		totalLen += 1
+		if v > 'z' {
+			totalLen += 1
+		}
+	}
+
+	if totalLen > maxCharLen {
 		println(repeatMark(mark, 2), title, repeatMark(mark, 2))
 	}
 
-	markLess := (maxCharLen - tLen) / 2
-	println(repeatMark(mark, markLess), title, repeatMark(mark, markLess))
+	markCount := (maxCharLen - totalLen) / 2
+
+	println(repeatMark(mark, markCount), title, repeatMark(mark, markCount))
 }
 
 func repeatMark(mark string, count int) string {
@@ -35,4 +44,8 @@ func pfTree(format string, v ...any) {
 
 func pSliceLenAndCap(slice []int) {
 	pfTree("len(%d), cap(%d)", len(slice), cap(slice))
+}
+
+func pPtr(v any) {
+	fmt.Printf("%p\n", v)
 }
