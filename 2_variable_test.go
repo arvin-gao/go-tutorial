@@ -9,10 +9,11 @@ import (
 	"unicode/utf8"
 )
 
-type (
-	Point struct{ x, y float64 } // Point and struct{ x, y float64 } are different types
-	polar Point                  // polar and Point denote different types
-)
+// TODO: ?.
+// type (
+// Point struct{ x, y float64 } // Point and struct{ x, y float64 } are different types
+// polar Point                  // polar and Point denote different types
+// )
 
 func TestDeclaration(t *testing.T) {
 	var a int

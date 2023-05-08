@@ -42,6 +42,10 @@ func pfTree(format string, v ...any) {
 	fmt.Printf(format, v...)
 }
 
+func pf(format string, v ...any) {
+	fmt.Printf(strings.TrimSpace(format)+"\n", v...)
+}
+
 func pSliceLenAndCap(slice []int) {
 	pfTree("len(%d), cap(%d)", len(slice), cap(slice))
 }

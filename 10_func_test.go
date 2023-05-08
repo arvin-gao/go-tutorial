@@ -1,13 +1,17 @@
 package gotutorial
 
 import (
-	"fmt"
 	"testing"
 )
 
 func TestFunction(t *testing.T) {
 	pTitle("call simple functions ")
-	simpleFunc(1, 2, "str1", "str2")
+
+	simpleFunc(1, 2, "v3 string", "str2")
+
+	slice := []string{"str1", "str2"}
+	simpleFunc(1, 2, "v3", slice...)
+
 	v1, v2 := simpleFunc2()
 	println(v1, v2)
 	println(simpleFunc2())
@@ -17,51 +21,63 @@ func TestFunction(t *testing.T) {
 		println("1")
 	}()
 
-	a := func(x int) int {
+	func1 := func(x int) int {
 		return x + 1
 	}
-	println(a(2))
+	println(func1(2))
 
-	b := func(x int) int {
+	vByFunc := func(x int) int {
 		return x + 1
 	}(3)
-	println(b)
+	println(vByFunc)
 
 	pTitle("function 當作參數傳遞")
 	sendFunc(func(x int) int {
-		fmt.Println("this is my x:", x)
+		println("this is my x:", x)
 		return x + 123
 	})
 
 	// 閉包
-	f := Closure()
-	fmt.Println(f(1))
-	fmt.Println(f(2))
+	f := closures()
+	println("f(1):", f(1))
+	println("f(2):", f(2))
+
+	// 遞迴
+	println("fib(7):", fib(3))
 }
 
-func Closure() func(b int) int {
+func closures() func(b int) int {
 	var num int
-	return func(b int) int {
+	println("closure init, num address:", &num)
+	return func(n int) int {
 		num++
-		fmt.Println("num:", num)
-		return b + 2
+		pf("num(%p): %d", &num, num)
+		return num + n
 	}
 }
 
-func sendFunc(f func(int) int) {
-	println(f)
-	fmt.Println(f(10))
+func fib(n int) int {
+	if n < 2 {
+		return n
+	}
+
+	return fib(n-1) + fib(n-2)
 }
 
-func simpleFunc(v, v2 int, strSlice ...string) (int, int) {
+func sendFunc(f func(int) int) {
+	println(f(10))
+}
+
+func simpleFunc(v, v2 int, v3 string, strSlice ...string) (int, int, string) {
 	x := v + 1
-	y := v + 2
+	y := v2 + 2
+	z := v3 + "hi"
 
 	for _, v := range strSlice {
 		println(v)
 	}
 
-	return x, y
+	return x, y, z
 }
 
 func simpleFunc2() (x, y int) {

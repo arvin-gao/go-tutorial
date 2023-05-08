@@ -38,6 +38,7 @@ func TestTemp2(t *testing.T) {
 	var v Obj
 	fmt.Printf("v: %p\n", &v)
 	v.printObjWithPointer()
+	println()
 	v.printObjWithoutPointer()
 	v.printObjWithoutPointer()
 }
@@ -50,4 +51,7 @@ func TestTemp3(t *testing.T) {
 		}(values[ix])
 	}
 
+}
+func TestPf(t *testing.T) {
+	pf("as%d", 12)
 }

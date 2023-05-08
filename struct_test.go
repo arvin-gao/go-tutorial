@@ -8,6 +8,61 @@ import (
 	"unsafe"
 )
 
+type MyStructure struct {
+	MySecondStructure
+	Field1 string
+	Field2 string
+	Field3 string
+}
+
+type MySecondStructure struct {
+	count int
+}
+
+func (m *MySecondStructure) Count() {
+	m.count++
+}
+
+func (m MySecondStructure) Count2() {
+	m.count++ // ineffective assignment to field MySecondStructure.count
+}
+
+func TestStruct(t *testing.T) {
+	var s MyStructure
+	s2 := MyStructure{
+		MySecondStructure: MySecondStructure{
+			count: 1,
+		},
+		Field1: "v1",
+		Field2: "v2",
+		Field3: "v3",
+	}
+	println(s2.Field1, s2.Field2, s2.Field3, s2.count)
+
+	pass(s, s2)
+}
+
+func TestDuplicatedField(t *testing.T) {
+	type A struct{ a int }
+	type B struct{ a, b int }
+
+	type C struct {
+		A
+		B
+		b float32
+	}
+	var c C
+	c.A.a = 1
+	c.B.a = 1
+	fmt.Println(c)
+	// fmt.Println(c.a) // error!
+
+	c.b = 2
+	fmt.Println(c.b)
+	c.b = 1.1
+	fmt.Println(c.b)
+}
+
 func TestStructTag(t *testing.T) {
 	type _User struct {
 		ID     int64  `json:"iD"`
@@ -55,52 +110,48 @@ func TestStructTag(t *testing.T) {
 	}
 }
 
+/*
+Refer to https://stackoverflow.com/questions/2113751/sizeof-struct-in-go
+
+bool, int8/uint8 take 1 byte
+int16, uint16 - 2 bytes
+int32, uint32, float32 - 4 bytes
+int64, uint64, float64, pointer - 8 bytes
+string - 16 bytes (2 alignments of 8 bytes)
+any slice takes 24 bytes (3 alignments of 8 bytes). So []bool, [][][]string are the same (do not forget to reread the citation I added in the beginning)
+array of length n takes n * type it takes of bytes.
+*/
 func TestStructSize(t *testing.T) {
 	type Empty struct{}
-	type V1 struct {
+
+	type A struct {
 		v1 string
 	}
 
-	type A struct {
+	type B struct {
+		v1 int32
+	}
+
+	type C struct {
 		v1 string
 		v2 int32
 	}
 
-	type B struct {
+	type D struct {
 		v1 string
 		v2 int64
 	}
 
-	type C struct {
+	type E struct {
 		v1 string
 		v2 string
 		A  A
 	}
 
-	fmt.Println(unsafe.Sizeof(Empty{}))
-	fmt.Println(unsafe.Sizeof(V1{}))
-	fmt.Println(unsafe.Sizeof(A{}))
-	fmt.Println(unsafe.Sizeof(B{}))
-	fmt.Println(unsafe.Sizeof(C{}))
-}
-
-func TestDuplicatedField(t *testing.T) {
-	type A struct{ a int }
-	type B struct{ a, b int }
-
-	type C struct {
-		A
-		B
-		b float32
-	}
-	var c C
-	c.A.a = 1
-	c.B.a = 1
-	fmt.Println(c)
-	// fmt.Println(c.a) // error!
-
-	c.b = 2
-	fmt.Println(c.b)
-	c.b = 1.1
-	fmt.Println(c.b)
+	println("Empty size:", unsafe.Sizeof(Empty{}))
+	println("A size:", unsafe.Sizeof(A{}))
+	println("B size:", unsafe.Sizeof(B{}))
+	println("C size:", unsafe.Sizeof(C{}))
+	println("D size:", unsafe.Sizeof(D{}))
+	println("E size:", unsafe.Sizeof(E{}))
 }
