@@ -41,13 +41,13 @@ func TestPointerSize(t *testing.T) {
 		n2  *int64
 		n21 *int32
 	)
-	println("User:", unsafe.Sizeof(u1))
-	println("string:", unsafe.Sizeof(s1))
-	println("int64:", unsafe.Sizeof(n1))
-	println("int32:", unsafe.Sizeof(n11))
-	println("*User:", unsafe.Sizeof(u2))
-	println("*string:", unsafe.Sizeof(s2))
-	println("*int64:", unsafe.Sizeof(n2))
-	println("*int32:", unsafe.Sizeof(n21))
+	println("User size:", unsafe.Sizeof(u1))
+	println("string size:", unsafe.Sizeof(s1))
+	println("int64 size:", unsafe.Sizeof(n1))
+	println("int32 size:", unsafe.Sizeof(n11))
+	println("*User size:", unsafe.Sizeof(u2))
+	println("*string size:", unsafe.Sizeof(s2))
+	println("*int64 size:", unsafe.Sizeof(n2))
+	println("*int32 size:", unsafe.Sizeof(n21))
 	// TODO: compare size of param with the pointer and normal param.
 }

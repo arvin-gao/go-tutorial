@@ -8,6 +8,10 @@ import (
 func pass(v ...any) {
 }
 
+func println(v ...any) {
+	fmt.Println(v...)
+}
+
 func pTitle(title string) {
 	mark := "="
 	maxCharLen := 40
