@@ -1,7 +1,6 @@
 package packages
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
@@ -58,25 +57,26 @@ func TestEpoch(t *testing.T) {
 // refer to: https://gobyexample.com/time-formatting-parsing
 func TestTimeFormat(t *testing.T) {
 	now := time.Now()
-	pln(now.Format(time.RFC3339))
+	pln(now.Format(time.RFC3339)) // 2023-05-10T11:21:57+08:00
 
 	t1, err := time.Parse(
 		time.RFC3339,
-		"2012-11-01T22:08:41+00:00")
-	pln(t1)
+		"2012-11-01T22:08:41+00:00",
+	)
+	pln(t1) // 2012-11-01 22:08:41 +0000 +0000
+	pass(err)
 
-	pln(now.Format("3:04PM"))
-	pln(now.Format("Mon Jan _2 15:04:05 2006"))
-	pln(now.Format("2006-01-02T15:04:05.999999-07:00"))
+	pln(now.Format("3:04PM"))                           // 11:21AM
+	pln(now.Format("Mon Jan _2 15:04:05 2006"))         // Wed May 10 11:21:57 2023
+	pln(now.Format("2006-01-02T15:04:05.999999-07:00")) // 2023-05-10T11:21:57.743786+08:00
+
 	form := "3 04 PM"
 	t2, err := time.Parse(form, "8 41 PM")
-	pln(t2)
+	pln(t2) // 0000-01-01 20:41:00 +0000 UTC
+	pass(err)
 
-	fmt.Printf("%d-%02d-%02dT%02d:%02d:%02d-00:00\n",
+	pf("%d-%02d-%02dT%02d:%02d:%02d-00:00\n",
 		now.Year(), now.Month(), now.Day(),
-		now.Hour(), now.Minute(), now.Second())
-
-	ansic := "Mon Jan _2 15:04:05 2006"
-	_, err = time.Parse(ansic, "8:41PM")
-	pln(err)
+		now.Hour(), now.Minute(), now.Second(),
+	) // 2023-05-10T11:21:57-00:00
 }

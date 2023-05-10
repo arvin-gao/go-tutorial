@@ -7,3 +7,5 @@ var (
 	pf  = fmt.Printf
 	pln = fmt.Println
 )
+
+func pass(v ...any) {}

@@ -2,9 +2,14 @@ package packages
 
 import (
 	"flag"
+	"io"
 	"os"
+	"os/exec"
+	"os/signal"
 	"strings"
+	"syscall"
 	"testing"
+	"time"
 )
 
 func TestCliWithArgs(t *testing.T) {
@@ -78,4 +83,84 @@ func TestEnv(t *testing.T) {
 		pair := strings.SplitN(e, "=", 2)
 		pln(pair[0])
 	}
+}
+
+func TestCmd(t *testing.T) {
+	dateCmd := exec.Command("date")
+
+	dateOut, err := dateCmd.Output()
+	if err != nil {
+		panic(err)
+	}
+	pln("> date")
+	pln(string(dateOut))
+
+	_, err = exec.Command("date", "-x").Output()
+	if err != nil {
+		switch e := err.(type) {
+		case *exec.Error:
+			pln("failed executing:", err)
+		case *exec.ExitError:
+			pln("command exit rc =", e.ExitCode())
+		default:
+			panic(err)
+		}
+	}
+
+	grepCmd := exec.Command("grep", "hello")
+
+	grepIn, _ := grepCmd.StdinPipe()
+	grepOut, _ := grepCmd.StdoutPipe()
+	grepCmd.Start()
+	grepIn.Write([]byte("hello grep\ngoodbye grep"))
+	grepIn.Close()
+	grepBytes, _ := io.ReadAll(grepOut)
+	grepCmd.Wait()
+
+	pln("> grep hello")
+	pln(string(grepBytes))
+
+	lsCmd := exec.Command("bash", "-c", "ls -a -l -h")
+	lsOut, err := lsCmd.Output()
+	if err != nil {
+		panic(err)
+	}
+	pln("> ls -a -l -h")
+	pln(string(lsOut))
+}
+
+func TestExecProcess(t *testing.T) {
+	binary, lookErr := exec.LookPath("ls")
+	if lookErr != nil {
+		panic(lookErr)
+	}
+
+	args := []string{"ls", "-a", "-l", "-h"}
+
+	env := os.Environ()
+
+	execErr := syscall.Exec(binary, args, env)
+	if execErr != nil {
+		panic(execErr)
+	}
+}
+
+func TestSignal(t *testing.T) {
+	worker := func() {
+		pln("working")
+	}
+
+	sigs := make(chan os.Signal, 1)
+
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		for {
+			worker()
+			time.Sleep(time.Second)
+		}
+	}()
+
+	pln("awaiting signal")
+	pln("exiting.", <-sigs)
 }
