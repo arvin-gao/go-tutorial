@@ -1,17 +1,16 @@
 package gotutorial
 
 import (
-	"fmt"
 	"testing"
 )
 
 func TestOperation(t *testing.T) {
-	fmt.Println("go" + "lang")
+	println("go" + "lang")
 
-	fmt.Println("1+1 =", 1+1)
-	fmt.Println("7.0/3.0 =", 7.0/3.0)
+	println("1+1 =", 1+1)
+	println("7.0/3.0 =", 7.0/3.0)
 
-	fmt.Println(true && false)
-	fmt.Println(true || false)
-	fmt.Println(!true)
+	println(true && false)
+	println(true || false)
+	println(!true)
 }

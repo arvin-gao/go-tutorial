@@ -5,11 +5,32 @@ import (
 	"testing"
 )
 
-func TestRecover(t *testing.T) {
+/*
+A panic typically means something went unexpectedly wrong
+
+A common use of panic is to abort if a function returns an
+error value that we don’t know how to (or want to) handle.
+*/
+func TestPanic(t *testing.T) {
+	panic("panic message")
+}
+
+/*
+Recover can stop a panic from aborting the program and let
+it continue with execution instead
+
+# Recover must be called within a deferred function
+
+An example of where this can be useful:
+A server wouldn’t want to crash if one of the client connections
+exhibits a critical error. Instead, the server would want to
+close that connection and continue serving other clients.
+*/
+func TestPanicWithRecover(t *testing.T) {
 	defer func() {
 		println("done 2")
 		if v := recover(); v != nil {
-			fmt.Println("recover 2:", v)
+			println("recover 2:", v)
 		}
 	}()
 
@@ -18,7 +39,7 @@ func TestRecover(t *testing.T) {
 	defer func() {
 		println("done 1")
 		if v := recover(); v != nil {
-			fmt.Println("recover 1:", v)
+			println("recover 1:", v)
 		}
 	}()
 

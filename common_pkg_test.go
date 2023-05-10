@@ -14,8 +14,8 @@ func TestCommonPkg(t *testing.T) {
 		// err error
 	)
 
-	fmt.Println("")
-	fmt.Println(fmt.Sprintf("%d, %d", 1, 2))
+	println("")
+	println(fmt.Sprintf("%d, %d", 1, 2))
 
 	// strings.
 	strSlice := strings.Fields(" dd dte aseg ")

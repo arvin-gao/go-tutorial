@@ -1,47 +1,54 @@
 package gotutorial
 
 import (
-	"fmt"
-	"math"
 	"testing"
 )
 
-type geometry interface {
-	area() float64
-	perim() float64
+type Eater interface {
+	Eat()
 }
 
-type rect struct {
-	width, height float64
-}
-type circle struct {
-	radius float64
+type Runner interface {
+	Run()
 }
 
-func (r rect) area() float64 {
-	return r.width * r.height
-}
-func (r rect) perim() float64 {
-	return 2*r.width + 2*r.height
+type Animal interface {
+	Eater
+	Runner
 }
 
-func (c circle) area() float64 {
-	return math.Pi * c.radius * c.radius
-}
-func (c circle) perim() float64 {
-	return 2 * math.Pi * c.radius
+type Dog struct {
+	Name string
 }
 
-func measure(g geometry) {
-	fmt.Println(g)
-	fmt.Println(g.area())
-	fmt.Println(g.perim())
+func (d *Dog) Eat() {
+	pf("%s is eating\n", d.Name)
 }
 
-func TestInterface(t *testing.T) {
-	r := rect{width: 3, height: 4}
-	c := circle{radius: 5}
+func (d *Dog) Run() {
+	pf("%s is running\n", d.Name)
+}
 
-	measure(r)
-	measure(c)
+func ShowEat(animal Animal) {
+	animal.Eat()
+}
+
+func ShowRun(animal Animal) {
+	animal.Run()
+}
+
+func ShowEat2(eater Eater) {
+	eater.Eat()
+}
+
+func ShowRun2(runner Runner) {
+	runner.Run()
+}
+
+func TestInterface2(t *testing.T) {
+	dog := Dog{Name: "dog1"}
+	ShowEat(&dog)
+	ShowRun(&dog)
+	ShowEat2(&dog)
+	ShowRun2(&dog)
 }

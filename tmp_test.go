@@ -17,9 +17,9 @@ func TestTemp(t *testing.T) {
 
 	var a int
 	if a = 10; a > 9 {
-		fmt.Println("1", a)
+		println("1", a)
 	}
-	fmt.Println(a)
+	println(a)
 }
 
 type Obj struct {

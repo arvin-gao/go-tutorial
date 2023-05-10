@@ -85,3 +85,14 @@ func simpleFunc2() (x, y int) {
 	y = 2
 	return // 也可直接使用 return 1, 2
 }
+
+func TestAliasFunction(t *testing.T) {
+	var p = println
+
+	myFunc := func() {
+		p("my function")
+	}
+
+	var f = myFunc
+	f()
+}

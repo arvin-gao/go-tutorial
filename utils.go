@@ -9,7 +9,7 @@ func pass(v ...any) {
 }
 
 func println(v ...any) {
-	fmt.Println(v...)
+	println(v...)
 }
 
 func pTitle(title string) {
@@ -38,7 +38,7 @@ func repeatMark(mark string, count int) string {
 }
 
 func pCode(code string) {
-	fmt.Println("> " + code)
+	println("> " + code)
 }
 
 func pfTree(format string, v ...any) {

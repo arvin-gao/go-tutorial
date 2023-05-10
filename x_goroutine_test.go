@@ -1,7 +1,6 @@
 package gotutorial
 
 import (
-	"fmt"
 	"sync"
 	"testing"
 	"time"
@@ -69,10 +68,10 @@ func TestChannelWithDeadlock2(t *testing.T) {
 // if send a msg to closed channel, that will be panic with 'panic: send on closed channel' message.
 func TestChannelWithClose(t *testing.T) {
 	buffCh <- 1
-	fmt.Println(unsafe.Sizeof(buffCh))
+	println(unsafe.Sizeof(buffCh))
 	close(buffCh)
 	// buffCh <- 1
-	fmt.Println(unsafe.Sizeof(buffCh))
+	println(unsafe.Sizeof(buffCh))
 
 }
 
@@ -100,7 +99,6 @@ func TestChannelWithRangeLoop(t *testing.T) {
 	}
 }
 
-// TODO: what diff between the make(chan int) and make(chan int, 1).
 func TestSingleChannelWithGoroutineLoop(t *testing.T) {
 	count := 10
 	go func() {
@@ -224,7 +222,7 @@ func TestChannelWithSelect(t *testing.T) {
 }
 
 type Counter struct {
-	sync.RWMutex
+	sync.Mutex
 	v int
 }
 

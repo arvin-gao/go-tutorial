@@ -8,6 +8,11 @@ import (
 	"unsafe"
 )
 
+// TODO: .
+// type (
+// Point struct{ x, y float64 } // Point and struct{ x, y float64 } are different types
+// polar Point                  // polar and Point denote different types
+// )
 type MyStructure struct {
 	MySecondStructure
 	Field1 string
@@ -54,13 +59,13 @@ func TestDuplicatedField(t *testing.T) {
 	var c C
 	c.A.a = 1
 	c.B.a = 1
-	fmt.Println(c)
-	// fmt.Println(c.a) // error!
+	println(c)
+	// println(c.a) // error!
 
 	c.b = 2
-	fmt.Println(c.b)
+	println(c.b)
 	c.b = 1.1
-	fmt.Println(c.b)
+	println(c.b)
 }
 
 func TestStructTag(t *testing.T) {
@@ -78,7 +83,7 @@ func TestStructTag(t *testing.T) {
 	}
 
 	b, _ := json.MarshalIndent(&u, "", "\t")
-	fmt.Println(string(b))
+	println(string(b))
 
 	// 取得 tag value
 	field, ok := reflect.TypeOf(u).FieldByName("Name")
@@ -86,7 +91,7 @@ func TestStructTag(t *testing.T) {
 		fmt.Printf("field.tag: %s; Json value: %s\n", field.Tag, field.Tag.Get("json"))
 	}
 
-	fmt.Println("===")
+	println("===")
 	uType := reflect.TypeOf(u)
 	for i := 0; i < uType.NumField(); i++ {
 		field := uType.Field(i)

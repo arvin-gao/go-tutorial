@@ -16,7 +16,7 @@ func TestArray(t *testing.T) {
 		{2, 3, 4},
 		{3, 4, 5},
 	}
-	fmt.Println(arr1, arr2, arr3, arr4, arr5)
+	println(arr1, arr2, arr3, arr4, arr5)
 	// len cap
 	fmt.Printf("var arr1 [2]int -> len:%d, cap:%d\n", len(arr1), cap(arr1))
 }
@@ -43,9 +43,6 @@ func TestSlice(t *testing.T) {
 	pfTree("%v", ss[:3])
 	pCode("ss[2:4]")
 	pfTree("%v", ss[2:4])
-	// TODO: to figure out below.
-	// pCode("ss[2:4:7]")
-	// pfChild("%v", ss[2:5:7])
 
 	var ss2 []int
 	ss2 = nil
@@ -164,9 +161,9 @@ func TestSliceExample1(t *testing.T) {
 
 	s1[2] = 20
 
-	fmt.Println(s1)
-	fmt.Println(s2)
-	fmt.Println(slice)
+	println(s1)
+	println(s2)
+	println(slice)
 }
 
 func TestSliceExample2(t *testing.T) {
@@ -180,13 +177,13 @@ func TestSliceExample2(t *testing.T) {
 	}
 
 	slice := make([]int, 5)
-	fmt.Println("origin slice[0]: ", slice[0])
+	println("origin slice[0]: ", slice[0])
 
 	changeFirstBeforeAppend(slice)
-	fmt.Println("changeFirstBeforeAppend slice[0]: ", slice[0])
+	println("changeFirstBeforeAppend slice[0]: ", slice[0])
 
 	changeFirst(slice)
-	fmt.Println("changeFirst slice[0]: ", slice[0])
+	println("changeFirst slice[0]: ", slice[0])
 }
 
 func TestSliceExample3(t *testing.T) {
@@ -197,8 +194,8 @@ func TestSliceExample3(t *testing.T) {
 	s := []int{1, 1, 1}
 	newS := myAppend(s)
 
-	fmt.Println(s)
-	fmt.Println(newS)
+	println(s)
+	println(newS)
 
 	s = newS
 
@@ -206,7 +203,7 @@ func TestSliceExample3(t *testing.T) {
 		*s = append(*s, 100)
 	}
 	myAppendPtr(&s)
-	fmt.Println(s)
+	println(s)
 }
 
 func TestSliceExample4(t *testing.T) {
@@ -245,9 +242,9 @@ func TestSliceExample4(t *testing.T) {
 	s = append(s, 4)
 	print("s: ")
 	pPtr(s)
-	fmt.Println("s:", s)
-	fmt.Println("x:", x)
-	fmt.Println("y:", y)
+	println("s:", s)
+	println("x:", x)
+	println("y:", y)
 	pCode("s = append(s, 5)")
 	s = append(s, 5)
 	print("s: ")
@@ -261,7 +258,7 @@ func TestSliceExample5(t *testing.T) {
 	y := a[2:]
 	x = append(x, y...)
 	x = append(x, y...)
-	fmt.Println(a, x)
+	println(a, x)
 }
 
 func TestSliceExample6(t *testing.T) {

@@ -1,10 +1,13 @@
 package gotutorial
 
 import (
-	"fmt"
 	"testing"
 )
 
+/*
+Defer is used to ensure that a function call is performed
+later in a program’s execution, usually for purposes of cleanup.
+*/
 func TestDefer(t *testing.T) {
 
 }
@@ -12,7 +15,7 @@ func TestDefer(t *testing.T) {
 func TestDeferExample1(t *testing.T) {
 	var a int
 	a = 10
-	defer fmt.Println("example. ", a*a)
+	defer println("example. ", a*a)
 	a = 20
 	deferB()
 	a = 30
@@ -21,18 +24,18 @@ func TestDeferExample1(t *testing.T) {
 func deferB() {
 	trace("b")
 	defer unTrace("b")
-	fmt.Println("in b")
+	println("in b")
 	deferA()
 }
 
 func deferA() {
 	trace("a")
 	defer unTrace("a")
-	fmt.Println("in a")
+	println("in a")
 }
 
-func trace(s string)   { fmt.Println("entering:", s) }
-func unTrace(s string) { fmt.Println("leaving:", s) }
+func trace(s string)   { println("entering:", s) }
+func unTrace(s string) { println("leaving:", s) }
 
 func TestDeferExample2(t *testing.T) {
 	a := 1
@@ -45,6 +48,6 @@ func TestDeferExample2(t *testing.T) {
 
 func calc(index string, a *int, b int) int {
 	ret := *a + b
-	fmt.Println(index, *a, b, ret)
+	println(index, *a, b, ret)
 	return ret
 }

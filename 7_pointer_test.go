@@ -1,7 +1,6 @@
 package gotutorial
 
 import (
-	"fmt"
 	"testing"
 	"unsafe"
 )
@@ -11,15 +10,15 @@ func TestPointer(t *testing.T) {
 	var e2 **int = &e
 	var e3 ***int = &e2
 	*e = 1
-	fmt.Println(e, &e, *e)
-	fmt.Println(e2, &e2, *e2, **e2)
-	fmt.Println(e3, &e3, *e3, **e3, ***e3)
+	println(e, &e, *e)
+	println(e2, &e2, *e2, **e2)
+	println(e3, &e3, *e3, **e3, ***e3)
 
 	// send a ptr to function
 	var v1, v2 = 1, 2
 	changePtr(&v1)
 	changeNonPtr(v2)
-	fmt.Println(v1, v2)
+	println(v1, v2)
 }
 
 func changePtr(v *int) {

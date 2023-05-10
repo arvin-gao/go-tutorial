@@ -1,7 +1,6 @@
 package gotutorial
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -44,7 +43,7 @@ func (lst *List[T]) GetAll() []T {
 func TestGenerics(t *testing.T) {
 	var m = map[int]string{1: "2", 2: "4", 4: "8"}
 
-	fmt.Println("keys:", MapKeys(m))
+	println("keys:", MapKeys(m))
 
 	_ = MapKeys[int, string](m)
 
@@ -52,5 +51,5 @@ func TestGenerics(t *testing.T) {
 	lst.Push(10)
 	lst.Push(13)
 	lst.Push(23)
-	fmt.Println("list:", lst.GetAll())
+	println("list:", lst.GetAll())
 }
