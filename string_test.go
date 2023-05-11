@@ -88,7 +88,7 @@ func TestStringType(t *testing.T) {
 		pfTree("len: %d, cap: %d", strBuf.Len(), strBuf.Cap())
 	}
 	pTitle("string growing")
-	// TODO: string cap?(memory, copy).
+
 	str = ""
 	addWord(&str, 1)
 	printStringLenAndCap(&str)

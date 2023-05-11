@@ -9,7 +9,7 @@ func pass(v ...any) {
 }
 
 func println(v ...any) {
-	println(v...)
+	fmt.Println(v...)
 }
 
 func pTitle(title string) {

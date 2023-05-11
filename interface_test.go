@@ -12,6 +12,7 @@ type Runner interface {
 	Run()
 }
 
+// 介面繼承
 type Animal interface {
 	Eater
 	Runner

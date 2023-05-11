@@ -31,22 +31,27 @@ func changeNonPtr(v int) {
 
 func TestPointerSize(t *testing.T) {
 	var (
-		u1  User
-		s1  string
-		n1  int64
-		n11 int32
-		u2  *User
-		s2  *string
-		n2  *int64
-		n21 *int32
+		user     User
+		str      string
+		num      int
+		num8     int8
+		num16    int16
+		num32    int32
+		num64    int64
+		userPtr  *User
+		strPtr   *string
+		num32Ptr *int32
+		num63Ptr *int64
 	)
-	println("User size:", unsafe.Sizeof(u1))
-	println("string size:", unsafe.Sizeof(s1))
-	println("int64 size:", unsafe.Sizeof(n1))
-	println("int32 size:", unsafe.Sizeof(n11))
-	println("*User size:", unsafe.Sizeof(u2))
-	println("*string size:", unsafe.Sizeof(s2))
-	println("*int64 size:", unsafe.Sizeof(n2))
-	println("*int32 size:", unsafe.Sizeof(n21))
-	// TODO: compare size of param with the pointer and normal param.
+	println("User size:", unsafe.Sizeof(user), "byte")
+	println("string size:", unsafe.Sizeof(str), "byte")
+	println("int size:", unsafe.Sizeof(num), "byte")
+	println("int8 size:", unsafe.Sizeof(num8), "byte")
+	println("int16 size:", unsafe.Sizeof(num16), "byte")
+	println("int32 size:", unsafe.Sizeof(num32), "byte")
+	println("int64 size:", unsafe.Sizeof(num64), "byte")
+	println("*User size:", unsafe.Sizeof(userPtr), "byte")
+	println("*string size:", unsafe.Sizeof(strPtr), "byte")
+	println("*int32 size:", unsafe.Sizeof(num32Ptr), "byte")
+	println("*int64 size:", unsafe.Sizeof(num63Ptr), "byte")
 }

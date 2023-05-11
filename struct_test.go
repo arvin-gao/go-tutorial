@@ -8,11 +8,6 @@ import (
 	"unsafe"
 )
 
-// TODO: .
-// type (
-// Point struct{ x, y float64 } // Point and struct{ x, y float64 } are different types
-// polar Point                  // polar and Point denote different types
-// )
 type MyStructure struct {
 	MySecondStructure
 	Field1 string
@@ -160,3 +155,60 @@ func TestStructSize(t *testing.T) {
 	println("D size:", unsafe.Sizeof(D{}))
 	println("E size:", unsafe.Sizeof(E{}))
 }
+
+type Car struct {
+	DoorCount int
+}
+
+func (c *Car) Move() {
+	fmt.Println("car moving")
+}
+
+func (c *Car) CarMethod() {
+	fmt.Println("car method")
+}
+
+type A struct {
+	Value int
+}
+
+func (a *A) Amethod() {
+	fmt.Println("a method")
+}
+
+type SportCar struct {
+	Car
+	DoorCount int
+	MyA       A
+}
+
+func (c *SportCar) Move() {
+	fmt.Println("sportCar moving")
+}
+
+func TestObjectFeatures(t *testing.T) {
+	mySportCar := &SportCar{
+		DoorCount: 2,
+	}
+
+	println(mySportCar.DoorCount)
+	println(mySportCar.Car.DoorCount)
+	println(mySportCar.Car.DoorCount)
+	mySportCar.Move()
+	mySportCar.Car.Move()
+	mySportCar.CarMethod()
+	mySportCar.MyA.Amethod() // not have mySportCar.Amethod() method on hint list.
+}
+
+// 封裝(Encapsulation)
+/*
+通過限制只有特定類別的物件可以存取這一特定類別的成員
+存取權限：public, private
+*/
+
+// 繼承(extends, override)
+
+// 多型(Polymorphism
+/*
+abstract, interface
+*/
