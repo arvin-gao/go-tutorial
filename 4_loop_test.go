@@ -46,13 +46,13 @@ func TestLoopArrayAndSlice(t *testing.T) {
 
 func TestLoopMap(t *testing.T) {
 	m := map[string]string{
-		"1": "v-1",
-		"2": "v-2",
-		"3": "v-3",
-		"4": "v-4",
-		"5": "v-5",
-		"6": "v-6",
-		"7": "v-7",
+		"1": "v1",
+		"2": "v2",
+		"3": "v3",
+		"4": "v4",
+		"5": "v5",
+		"6": "v6",
+		"7": "v7",
 	}
 	// 順序不一定
 	for key, value := range m {

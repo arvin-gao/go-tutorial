@@ -24,6 +24,7 @@
 - 教學
   - [深度探討 Go - Go101](https://go101.org/)
   - [Mastering Go 簡體中文](https://github.com/hantmac/Mastering_Go_ZH_CN/blob/master/README.md)
+  - [Go-training - github](https://github.com/go-training/training)
 - Blogs
   - [AppleBOY](https://blog.wu-boy.com/)
 - Cheatsheet

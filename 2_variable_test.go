@@ -18,6 +18,14 @@ rune int int8 int16 int32 int64 #rune alias as int32
 byte uint uint8 uint16 uint32 uint64 uintptr #byte alias as uint8
 complex64 complex128
 */
+
+/*
+var x complex128 = complex(1, 2) // 1+2i
+var y complex128 = complex(3, 4) // 3+4i
+print(x*y)                 // "(-5+10i)"
+print(real(x*y))           // "-5"
+print(imag(x*y))           // "10"
+*/
 var (
 	globalVar int = 10
 )
