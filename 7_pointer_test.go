@@ -15,17 +15,19 @@ func TestPointer(t *testing.T) {
 	println(e3, &e3, *e3, **e3, ***e3)
 
 	// send a ptr to function
+	// v1 = 1, v2 = 2
+	// &v1 = 0x1, &v2 = 0x2
 	var v1, v2 = 1, 2
 	changePtr(&v1)
 	changeNonPtr(v2)
 	println(v1, v2)
 }
 
-func changePtr(v *int) {
+func changePtr(v *int) { // v = 0x1
 	*v++
 }
 
-func changeNonPtr(v int) {
+func changeNonPtr(v int) { // v = 2 , &v = 0x3
 	v++
 }
 

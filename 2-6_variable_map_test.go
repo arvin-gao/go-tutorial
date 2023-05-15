@@ -8,6 +8,7 @@ import (
 // TODO: map len and capacity.
 func TestMap(t *testing.T) {
 	m1 := make(map[string]int)
+	// TODO:
 	m2 := make(map[int]string, 2)
 	m3 := make(map[any]User)
 
@@ -15,7 +16,7 @@ func TestMap(t *testing.T) {
 	m22 := map[string]int{"k1": 1, "k2": 2, "k3": 3}
 	pass(m11, m22)
 
-	m1["k1"] = 7
+	m1["K1"] = 7
 	println(m1["k1"])
 
 	// map length.
@@ -26,11 +27,12 @@ func TestMap(t *testing.T) {
 	m3[true] = User{}
 
 	// check exist.
-	v, ok := m1["k2"]
-	if ok {
-		println("has key, value:", v)
+	val := m22["k2"]
+	val, isExist := m22["k2"]
+	if isExist {
+		println("has key, value:", val) // 2
 	} else {
-		println("non key, value:", v)
+		println("non key, value:", val) // 0
 	}
 
 	// delete the key.
@@ -60,19 +62,23 @@ func TestMap2(t *testing.T) {
 func TestChangeMapValue(t *testing.T) {
 	m1 := make(map[string]User)
 	m1["user1"] = User{Age: 1}
-	user11 := m1["user1"]
-	user12 := m1["user1"]
-	pPtr(&user11)
-	pPtr(&user12)
+	user1 := m1["user1"]
+	user2 := m1["user1"]
+	pPtr(&user1)
+	pPtr(&user2)
 
 	m2 := make(map[string]*User)
 	m2["user1"] = &User{Age: 1}
 	m2["user1"].Age = 5
 
-	println(m2["user1"].Age)
+	// m1["user1"].Age = 23 // panic, cannot assign to struct field m1["user1"].Age in map
+	user1.Age = 12
+	m1["user1"] = user1
 
+	pf("%+v\n%+v", m1["user1"], m2["user1"])
 }
 
+// TODO: advance.
 func TestConcurrencyMap(t *testing.T) {
 	var wg sync.WaitGroup
 

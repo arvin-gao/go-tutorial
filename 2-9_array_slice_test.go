@@ -7,31 +7,37 @@ import (
 
 func TestArray(t *testing.T) {
 	// init
-	var arr1 [2]int           // [0,0]
-	var arr2 = [2]int{}       // [0,0]
-	var arr3 = [2]int{1, 2}   // [1,2]
-	var arr4 = [...]int{1, 2} // [1,2]
+	var arr1 [2]int                             // [0,0]
+	var arr2 = [2]int{}                         // [0,0]
+	var arr3 = [2]int{1, 2}                     // [1,2]
+	var arr4 = [...]int{1, 2, 2, 3, 3, 4, 4, 5} // [1,2]
 	arr5 := [3][3]int{
 		{1, 2, 3},
 		{2, 3, 4},
 		{3, 4, 5},
 	}
 	println(arr1, arr2, arr3, arr4, arr5)
+	arr1[0] = 2
 	// len cap
 	fmt.Printf("var arr1 [2]int -> len:%d, cap:%d\n", len(arr1), cap(arr1))
 }
 
 func TestSlice(t *testing.T) {
 	// init
-	var slice1 []int // []
-	// var slice2 = []int{}                  // []
-	var slice3 = []int{1, 2} // [1,2]
-	// var slice4 = make([]int, 2)           // [0,0]
-	// var slice5 = make([]int, 2, 3)        // [0,0]
-	// var slice6 = make([]int, 0, 3)        // []
+	var slice1 []int                      // nil
+	var slice2 = []int{}                  // []
+	var slice3 = []int{1, 2}              // [1,2] -> len: 2, cap: 2
+	slice3 = append(slice3, 2)            // -> len: 3, cap: 4
+	slice3 = append(slice3, 2)            // -> len: 4, cap: 4
+	slice3 = append(slice3, 2)            // -> len: 5, cap: 8
+	var slice4 = make([]int, 2)           // [0,0], len:2, cap:2
+	slice4 = append(slice4, 0)            // [0,0,0] len:3, cap:4
+	var slice5 = make([]int, 2, 3)        // [0,0], len:2, cap:3
+	slice5 = append(slice5, 0)            // [0,0,0] len:3, cap:3
+	var slice6 = make([]int, 0, 3)        // []
 	var slice7 = make([]int, len(slice3)) // [0,0]
 	copy(slice7, slice3)
-	// slice8 := slice7[:len(slice7)-1]
+	slice8 := slice7[:len(slice7)-1]
 
 	var ss = []int{0, 1, 2, 3, 4, 5, 6, 7, 8}
 	pCode("var ss = []int{0,1,2,3,4,5,6,7,8}")
@@ -53,71 +59,69 @@ func TestSlice(t *testing.T) {
 	pfTree("ss2 ptr(%p)", ss2)
 	// len cap
 	pTitle("init")
-	// printfCode("var slice1 []int")
-	// printSliceLenAndCap(slice1)
-	// printfChild("value: %v", slice1)
-	// printfCode("var slice2 = []int{}")
-	// printSliceLenAndCap(slice2)
-	// printfChild("value: %v", slice2)
-	// printfCode("var slice3 = []int{1, 2}")
-	// printSliceLenAndCap(slice3)
-	// printfChild("value: %v", slice3)
-	// printfChild("&[0]:%p", &slice3[0])
-	// printfCode("var slice4 = make([]int, 2)")
-	// printSliceLenAndCap(slice4)
-	// printfChild("value: %v", slice4)
-	// printfCode("var slice5 = make([]int, 2, 3)")
-	// printSliceLenAndCap(slice5)
-	// printfChild("value: %v", slice5)
-	// printfCode("var slice6 = make([]int, 0, 3)")
-	// printSliceLenAndCap(slice6)
-	// printfChild("value: %v", slice6)
-	// printfCode("var slice7 = make([]int, len(slice3))")
-	// printfCode("copy(slice7, slice3)")
-	// printSliceLenAndCap(slice7)
-	// printfChild("value: %v", slice7)
-	// printfChild("&[0]:%p", &slice7[0])
-	// printfCode("slice8 := slice7[:len(slice7)-1]")
-	// printSliceLenAndCap(slice8)
-	// printfChild("value: %v", slice8)
+	pCode("var slice1 []int")
+	pSliceLenAndCap(slice1)
+	pfTree("value: %v", slice1)
+	pCode("var slice2 = []int{}")
+	pSliceLenAndCap(slice2)
+	pfTree("value: %v", slice2)
+	pCode("var slice3 = []int{1, 2}")
+	pSliceLenAndCap(slice3)
+	pfTree("value: %v", slice3)
+	pfTree("&[0]:%p", &slice3[0])
+	pCode("var slice4 = make([]int, 2)")
+	pSliceLenAndCap(slice4)
+	pfTree("value: %v", slice4)
+	pCode("var slice5 = make([]int, 2, 3)")
+	pSliceLenAndCap(slice5)
+	pfTree("value: %v", slice5)
+	pCode("var slice6 = make([]int, 0, 3)")
+	pSliceLenAndCap(slice6)
+	pfTree("value: %v", slice6)
+	pCode("var slice7 = make([]int, len(slice3))")
+	pCode("copy(slice7, slice3)")
+	pSliceLenAndCap(slice7)
+	pfTree("value: %v", slice7)
+	pfTree("&[0]:%p", &slice7[0])
+	pCode("slice8 := slice7[:len(slice7)-1]")
+	pSliceLenAndCap(slice8)
+	pfTree("value: %v", slice8)
+	pfTree("&[0]: %p", &slice8[0])
 
 	pTitle("append()")
 	// TODO: 檢查 append 後的slice地址是否相同？.
 	s := make([]int, 2, 3)
 	pCode("s := make([]int, 2, 3)")
-	pfTree("s address(%p)", s)
-	pfTree("s[0](%p)", s[0])
+	pfTree("s[0](%p)", &s[0])
 	s = append(s, 1)
 	pCode("s = append(s, 1)")
-	pfTree("s address(%p)", s)
-	pfTree("s[0](%p)", s[0])
+	pfTree("s[0](%p)", &s[0])
 	s = append(s, 1)
 	pCode("s = append(s, 1)")
-	pfTree("s address(%p)", s)
-	pfTree("s[0](%p)", s[0])
+	pfTree("s[0](%p)", &s[0])
 
-	slice1 = append(slice1, []int{1}...)
-	pCode("slice1 = append(slice1, []int{1}...)")
+	slice1 = append(slice1, []int{1, 2, 3}...)
+	pCode("slice1 = append(slice1, []int{1,2,3}...)")
 	pSliceLenAndCap(slice1)
 	pfTree("value: %v", slice1)
-	// slice1 = append(slice1, []int{2, 3}...)
-	// printfCode("slice1 = append(slice1, []int{2, 3}...)")
-	// printSliceLenAndCap(slice1)
-	// printfChild("value: %v", slice1)
-	// slice1 = append(slice1, []int{4}...)
-	// printfCode("slice1 = append(slice1, []int{4}...)")
-	// printSliceLenAndCap(slice1)
-	// printfChild("value: %v", slice1)
-	// slice1 = append(slice1, []int{5, 6, 7}...)
-	// printfCode("slice1 = append(slice1, []int{5,6,7}...)")
-	// printSliceLenAndCap(slice1)
-	// printfChild("value: %v", slice1)
+	slice1 = append(slice1, []int{2, 3}...)
+	pCode("slice1 = append(slice1, []int{2, 3}...)")
+	pSliceLenAndCap(slice1)
+	pfTree("value: %v", slice1)
+	slice1 = append(slice1, []int{4}...)
+	pCode("slice1 = append(slice1, []int{4}...)")
+	pSliceLenAndCap(slice1)
+	pfTree("value: %v", slice1)
+	slice1 = append(slice1, []int{5, 6, 7}...)
+	pCode("slice1 = append(slice1, []int{5,6,7}...)")
+	pSliceLenAndCap(slice1)
+	pfTree("value: %v", slice1)
 
 	slice1 = make([]int, 1024)
 	slice1 = append(slice1, []int{1}...)
-	// printfCode("slice1 = make([]int, 1024)")
-	// printfCode("slice1 = append(slice1, []int{1}...)")
-	// printSliceLenAndCap(slice1)
+	pCode("slice1 = make([]int, 1024)")
+	pCode("slice1 = append(slice1, []int{1}...)")
+	pSliceLenAndCap(slice1)
 	// modify value
 	pTitle("modify()")
 	slice1 = make([]int, 5)
@@ -125,14 +129,14 @@ func TestSlice(t *testing.T) {
 	slice1_by_copy := make([]int, 5)
 	copy(slice1_by_copy, slice1)
 	slice1[0] = 1
-	// printfCode("slice1 = make([]int, 5)")
-	// printfCode("slice1_by_directly := slice1[:]")
-	// printfCode("slice1_by_copy := make([]int, 5)")
-	// printfCode("copy(slice1_by_copy, slice1)")
-	// printfCode("slice1[0] = 1")
-	// printfChild("slice1[0]: %d (%p)", slice1[0], &slice1[0])
-	// printfChild("slice1_by_directly[0]: %d (%p)", slice1_by_directly[0], &slice1_by_directly[0])
-	// printfChild("slice1_by_copy[0]: %d (%p)", slice1_by_copy[0], &slice1_by_copy[0])
+	pCode("slice1 = make([]int, 5)")
+	pCode("slice1_by_directly := slice1[:]")
+	pCode("slice1_by_copy := make([]int, 5)")
+	pCode("copy(slice1_by_copy, slice1)")
+	pCode("slice1[0] = 1")
+	pfTree("slice1[0]: %d (%p)", slice1[0], &slice1[0])
+	pfTree("slice1_by_directly[0]: %d (%p)", slice1_by_directly[0], &slice1_by_directly[0])
+	pfTree("slice1_by_copy[0]: %d (%p)", slice1_by_copy[0], &slice1_by_copy[0])
 	slice1_by_directly = append(slice1_by_directly, 1)
 	slice1[0] = 2
 	pCode("slice1_by_directly = append(slice1_by_directly, 1)")

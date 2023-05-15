@@ -8,15 +8,16 @@ import (
 
 /*
 #1.20 later
-any #alias for interface{}
 comparable #僅用在參數上使用(that can compare values with the == and != operators)
+complex64 complex128
+
+any #alias for interface{}
 bool
 error
 string
 float32 float64 #IEEE-754 32/64-bit
 rune int int8 int16 int32 int64 #rune alias as int32
 byte uint uint8 uint16 uint32 uint64 uintptr #byte alias as uint8
-complex64 complex128
 */
 
 /*
@@ -95,6 +96,9 @@ func TestIntOverflow(t *testing.T) {
 	var n int = math.MaxInt64
 	println(n)
 	n = n + 1
+	println("n:", n)
+	println("n < 0:", n < 0)
+	n = n - 1
 	println("n:", n)
 	println("n < 0:", n < 0)
 

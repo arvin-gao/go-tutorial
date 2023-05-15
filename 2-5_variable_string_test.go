@@ -25,20 +25,21 @@ func TestString(t *testing.T) {
 
 	print("loop with index: ")
 	for i := 0; i < len(s); i++ {
-		print(s[i], " ")
+		print(s[i], " ") // byte
 	}
 
 	println()
 	print("loop with range: ")
 	for _, v := range s {
-		print(v, " ")
+		print(v, " ") // rune
 	}
 }
 
 func TestStringType(t *testing.T) {
 	// 修改字串 by index
 	str := "abc"
-	c := []byte(str)
+	c := []byte(str) // []byte{'c', 'b', 'c'}
+
 	println("origin string:", str)
 
 	c[0] = 'c'
@@ -74,6 +75,7 @@ func TestStringType(t *testing.T) {
 	strBuf.WriteString("test")
 	pfTree("strBuf.String(): %s", strBuf.String())
 
+	// TODO: wait
 	// 地址變化
 	addWord := func(s *string, count int) {
 		*s += strings.Repeat("a", count)

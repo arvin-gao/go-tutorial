@@ -46,7 +46,6 @@ func TestInterface(t *testing.T) {
 
 	uploadTextFile(awsStorage, content)
 	uploadTextFile(localStorage, content)
-
 }
 
 type Eater interface {
@@ -68,11 +67,23 @@ type Dog struct {
 }
 
 func (d *Dog) Eat() {
-	pf("%s is eating\n", d.Name)
+	pf("dog %s is eating\n", d.Name)
 }
 
 func (d *Dog) Run() {
-	pf("%s is running\n", d.Name)
+	pf("dog %s is running\n", d.Name)
+}
+
+type Cat struct {
+	Name string
+}
+
+func (d *Cat) Eat() {
+	pf("cat %s is eating\n", d.Name)
+}
+
+func (d *Cat) Run() {
+	pf("cat %s is running\n", d.Name)
 }
 
 func ShowEat(animal Animal) {
@@ -92,7 +103,13 @@ func ShowRun2(runner Runner) {
 }
 
 func TestInterface2(t *testing.T) {
-	dog := Dog{Name: "dog1"}
+	var animal Animal        // 介面
+	dog := Dog{Name: "dog1"} // 物件
+	cat := Cat{Name: "cat1"} // 物件
+	animal = &dog
+	animal = &cat
+	pass(animal)
+
 	ShowEat(&dog)
 	ShowRun(&dog)
 	ShowEat2(&dog)
