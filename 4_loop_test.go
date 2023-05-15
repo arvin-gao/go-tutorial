@@ -13,6 +13,7 @@ func TestLoop(t *testing.T) {
 	for j := 7; j <= 9; j++ {
 	}
 
+	// endless loop
 	for {
 		if i > 10 {
 			break
@@ -25,6 +26,10 @@ func TestLoop(t *testing.T) {
 			continue
 		}
 	}
+
+	for i := 0; ; i++ { // <=> for i := 0; true; i++ {
+	}
+
 }
 
 func TestLoopArrayAndSlice(t *testing.T) {

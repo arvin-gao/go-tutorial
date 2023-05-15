@@ -17,3 +17,7 @@ func TestSum(t *testing.T) {
 		}
 	}
 }
+
+func Sum(a, b int) int {
+	return a + b
+}

@@ -2,6 +2,7 @@ package gotutorial
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 	"unsafe"
@@ -16,21 +17,106 @@ var (
 
 func TestGoroutine(t *testing.T) {
 	f := func(str string) {
+		time.Sleep(50 * time.Millisecond)
 		for i := 0; i < 3; i++ {
-			println(str, ":", i)
+			println(str, i)
 		}
 	}
 
-	f("f1")
-
+	go f("f1")
 	go f("f2")
-
-	go func(msg string) {
-		println(msg)
-	}("f3")
-
+	go f("f3")
+	go f("f4")
+	println("sleeping...")
 	time.Sleep(time.Second)
 	println("done")
+}
+
+func TestGoroutineWithWaitGroup(t *testing.T) {
+	f := func(wg *sync.WaitGroup, str string) {
+		defer wg.Done()
+		time.Sleep(50 * time.Millisecond)
+		for i := 0; i < 3; i++ {
+			println(str, i)
+		}
+	}
+
+	var wg sync.WaitGroup
+	wg.Add(4)
+	go f(&wg, "f1")
+	go f(&wg, "f2")
+	go f(&wg, "f3")
+	go f(&wg, "f4")
+	wg.Wait()
+	println("done")
+}
+
+func TestCounterWithMultiGoroutine(t *testing.T) {
+	var count int
+
+	f := func(wg *sync.WaitGroup, lock *sync.Mutex) {
+		defer wg.Done()
+
+		lock.Lock()
+		defer lock.Unlock()
+
+		count++
+	}
+
+	var wg sync.WaitGroup
+	loopCount := 100000
+
+	wg.Add(loopCount)
+
+	var lock sync.Mutex
+	for i := 0; i < loopCount; i++ {
+		go f(&wg, &lock)
+	}
+
+	wg.Wait()
+
+	assert.Equal(t, loopCount, count)
+}
+
+func TestCounterWithGoroutineAndLock(t *testing.T) {
+	var (
+		lock  sync.Mutex
+		count int
+	)
+
+	f := func(wg *sync.WaitGroup, lock *sync.Mutex) {
+		defer wg.Done()
+
+		lock.Lock()
+		defer lock.Unlock()
+
+		count++
+	}
+
+	var wg sync.WaitGroup
+	loopCount := 100000
+
+	wg.Add(loopCount)
+
+	for i := 0; i < loopCount; i++ {
+		go f(&wg, &lock)
+	}
+
+	wg.Wait()
+
+	assert.Equal(t, loopCount, count)
+}
+
+func TestGoroutineExample(t *testing.T) {
+	var v1 = 123
+	go func(v2 int) {
+		time.Sleep(time.Second)
+		println(v1, v2)
+	}(v1)
+
+	v1 = 789
+
+	time.Sleep(2 * time.Second)
 }
 
 // Channels are the pipes that connect concurrent goroutines.
@@ -88,6 +174,7 @@ func TestChannelWithLoop(t *testing.T) {
 	}
 }
 
+// for range 會持續讀資料直到 channel 被關閉為止
 func TestChannelWithRangeLoop(t *testing.T) {
 	queue := make(chan string, 2)
 	queue <- "one"
@@ -329,32 +416,6 @@ func TestTicker(t *testing.T) {
 	println("Ticker stopped")
 }
 
-func TestAA(t *testing.T) {
-	var lock sync.Locker
-
-	go func() {
-		for i := 0; i < 1000; i++ {
-			func() {
-				lock.Lock()
-				defer lock.Unlock()
-				count := 0
-				ch1 := make(chan int, 1)
-				ch2 := make(chan int, 1)
-				for {
-					select {
-					case <-ch1:
-						count++
-					case <-ch2:
-						count++
-					}
-				}
-			}()
-		}
-
-	}()
-
-}
-
 func TestChannelExample2(t *testing.T) {
 	var sum int
 
@@ -398,61 +459,6 @@ func TestChannelExample3(t *testing.T) {
 	}
 }
 
-func TestTestee(t *testing.T) {
-	var (
-		lock               sync.Mutex
-		oneCount, twoCount int
-	)
-
-	f := func(wg *sync.WaitGroup, lock *sync.Mutex) {
-		lock.Lock()
-
-		defer wg.Done()
-		defer lock.Unlock()
-
-		var sum int
-
-		ch1 := make(chan int, 1)
-		ch2 := make(chan int, 1)
-
-		ch1 <- 1
-		ch2 <- 2
-
-		select {
-		case v := <-ch1:
-			sum += v
-		case v := <-ch2:
-			sum += v
-		case <-time.After(100 * time.Millisecond):
-			println("timeout. count:", sum)
-			return
-		}
-
-		if sum == 1 {
-			oneCount++
-		} else if sum == 2 {
-			twoCount++
-		} else {
-			println("invalid sum:", sum)
-		}
-	}
-
-	var wg sync.WaitGroup
-	loopCount := 100000
-
-	wg.Add(loopCount)
-
-	for i := 0; i < loopCount; i++ {
-		go f(&wg, &lock)
-	}
-
-	wg.Wait()
-
-	pf("one count: %d\ntwo count: %d", oneCount, twoCount)
-
-	assert.Equal(t, loopCount, oneCount+twoCount)
-}
-
 func TestWorkerWithGoroutineAndChannel(t *testing.T) {
 	worker := func(id int, jobs <-chan int, results chan<- int) {
 		for j := range jobs {
@@ -479,4 +485,86 @@ func TestWorkerWithGoroutineAndChannel(t *testing.T) {
 	for a := 1; a <= numJobs; a++ {
 		println("got result:", <-results)
 	}
+}
+
+// example from https://blog.wu-boy.com/2022/05/read-data-from-channel-in-go/
+func TestGoroutineExample1(t *testing.T) {
+	str := []byte("foobar")
+
+	ch := make(chan byte, len(str))
+	next := make(chan struct{})
+
+	wg := &sync.WaitGroup{}
+	wg.Add(2)
+
+	for i := 0; i < len(str); i++ {
+		ch <- str[i]
+	}
+
+	close(ch)
+
+	go func() {
+		defer wg.Done()
+		for {
+			if _, ok := <-next; !ok {
+				return
+			}
+
+			v, ok := <-ch
+			if !ok {
+				close(next)
+				return
+			}
+
+			println("goroutine01:", string(v))
+
+			next <- struct{}{}
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		for {
+			if _, ok := <-next; !ok {
+				return
+			}
+
+			v, ok := <-ch
+			if !ok {
+				close(next)
+				return
+			}
+
+			println("goroutine02:", string(v))
+
+			next <- struct{}{}
+		}
+	}()
+
+	next <- struct{}{}
+
+	wg.Wait()
+}
+
+// TODO: .
+func TestLockIncreaseCountByAtomic(t *testing.T) {
+	var ops uint64
+
+	var wg sync.WaitGroup
+
+	for i := 0; i < 50; i++ {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			for c := 0; c < 1000; c++ {
+				// ops++ // normal increment.
+				atomic.AddUint64(&ops, 1) // lock increment.
+			}
+		}()
+	}
+
+	wg.Wait()
+
+	println("ops:", ops)
 }

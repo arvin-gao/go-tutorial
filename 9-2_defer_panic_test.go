@@ -1,12 +1,11 @@
 package gotutorial
 
 import (
-	"fmt"
 	"testing"
 )
 
 /*
-A panic typically means something went unexpectedly wrong
+A panic typically means something went unexpectedly wrong.
 
 A common use of panic is to abort if a function returns an
 error value that we don’t know how to (or want to) handle.
@@ -54,16 +53,16 @@ func TestPanicWithRecover(t *testing.T) {
 */
 func TestDeferAndRecoverMechanism(t *testing.T) {
 	defer func() {
-		fmt.Print(recover()) // 4
+		println(recover())
 	}()
 
 	defer func() {
-		defer fmt.Print(recover()) // 3
+		defer println(recover())
 		defer panic(1)
-		recover() // 2
+		recover()
 	}()
 
-	defer recover() // 1
+	defer recover()
 	panic(2)
 }
 

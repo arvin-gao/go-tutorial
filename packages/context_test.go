@@ -1,4 +1,4 @@
-package gotutorial
+package packages
 
 import (
 	"fmt"

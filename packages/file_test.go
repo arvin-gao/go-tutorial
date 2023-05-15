@@ -11,6 +11,8 @@ import (
 )
 
 // refer to: https://gobyexample.com/reading-files
+
+// TODO: https://www.devdungeon.com/content/working-files-go
 func TestFile(t *testing.T) {
 	check := func(e error) {
 		if e != nil {
