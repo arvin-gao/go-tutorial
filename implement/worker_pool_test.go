@@ -16,24 +16,22 @@ func TestWorkerPool(t *testing.T) {
 type TaskFunc func(ctx context.Context) error
 
 func WorkerPool() {
-	taskCount := 100
-
-	tasks := make([]TaskFunc, taskCount, taskCount)
-
-	for i := 0; i < taskCount; i++ {
+	tasks := make([]TaskFunc, 0, 100)
+	for i := 0; i < 100; i++ {
 		func(val int) {
-			tasks[i] = func(ctx context.Context) error {
-				fmt.Println(i)
-				if i == 51 {
+			tasks = append(tasks, func(ctx context.Context) error {
+				fmt.Println(val)
+				if val == 51 {
 					return errors.New("missing")
 				}
 				return nil
-			}
+			})
 		}(i)
 	}
 
-	if err := ExecuteAll(0, tasks...); err == nil {
-		fmt.Println(err)
+	err := ExecuteAll(0, tasks...)
+	if err == nil {
+		fmt.Println("missing error")
 	}
 }
 
@@ -57,7 +55,8 @@ func ExecuteAll(numCPU int, tasks ...TaskFunc) error {
 			for task := range queue {
 				fmt.Println("get task")
 				if err == nil {
-					if taskErr := task(ctx); taskErr != nil {
+					taskErr := task(ctx)
+					if taskErr != nil {
 						err = taskErr
 						cancel()
 					}
