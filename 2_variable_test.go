@@ -94,17 +94,25 @@ func TestInitNil(t *testing.T) {
 // uint depending on your system support(32 bit or 64 bit)
 func TestIntOverflow(t *testing.T) {
 	var n int = math.MaxInt64
-	println(n)
+	println("n(MaxInt64) =", n)
 	n = n + 1
-	println("n:", n)
-	println("n < 0:", n < 0)
+	println("n + 1 =", n)
+	println("n < 0 =", n < 0)
 	n = n - 1
-	println("n:", n)
-	println("n < 0:", n < 0)
+	println("n - 1 =", n)
+	println("n < 0 =", n < 0)
 
 	var n2 int32 = math.MaxInt32
-	println(n2)
+	println("n2(MaxInt32) =", n2)
 	n2 = n2 + 1
-	println("n2:", n2)
-	println("n2 < 0:", n2 < 0)
+	println("n2 + 1 =", n2)
+	println("n2 < 0 =", n2 < 0)
+	var f float64 = math.MaxFloat64
+	println("f(MaxFloat64) =", f)
+	println("f + 1 =", f+1)
+	println("f + f =", f+f)
+	var f2 float32 = math.MaxFloat32
+	println("f2(MaxFloat32) =", f2)
+	println("f2 + 1 =", f2+1)
+	println("f2 + f2 =", f2+f2)
 }

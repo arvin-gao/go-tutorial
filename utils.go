@@ -14,15 +14,9 @@ func println(v ...any) {
 
 func pTitle(title string) {
 	mark := "="
-	maxCharLen := 40
+	maxCharLen := 25
 
-	var totalLen int
-	for _, v := range title {
-		totalLen += 1
-		if v > 'z' {
-			totalLen += 1
-		}
-	}
+	totalLen := len([]rune(title))
 
 	if totalLen > maxCharLen {
 		println(repeatMark(mark, 2), title, repeatMark(mark, 2))

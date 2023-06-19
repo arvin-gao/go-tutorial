@@ -2,6 +2,7 @@
 
 - [Go by Example - gobyexample](https://gobyexample.com/)
 - [Go in depth - go101](https://go101.org/article/101.html)
+- [Go learn - sjwhitworth](https://github.com/sjwhitworth/golearn)
 
 ## TODO
 1. all constants are unaddressable.
