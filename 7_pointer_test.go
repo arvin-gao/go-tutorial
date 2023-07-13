@@ -10,9 +10,9 @@ func TestPointer(t *testing.T) {
 	var e2 **int = &e
 	var e3 ***int = &e2
 	*e = 1
-	println(e, &e, *e)
-	println(e2, &e2, *e2, **e2)
-	println(e3, &e3, *e3, **e3, ***e3)
+	ptr(e, &e, *e)
+	ptr(e2, &e2, *e2, **e2)
+	ptr(e3, &e3, *e3, **e3, ***e3)
 
 	// send a ptr to function
 	// v1 = 1, v2 = 2
@@ -20,7 +20,7 @@ func TestPointer(t *testing.T) {
 	var v1, v2 = 1, 2
 	changePtr(&v1)
 	changeNonPtr(v2)
-	println(v1, v2)
+	ptr(v1, v2)
 }
 
 func changePtr(v *int) { // v = 0x1
@@ -45,15 +45,15 @@ func TestPointerSize(t *testing.T) {
 		num32Ptr *int32
 		num63Ptr *int64
 	)
-	println("User size:", unsafe.Sizeof(user), "byte")
-	println("string size:", unsafe.Sizeof(str), "byte")
-	println("int size:", unsafe.Sizeof(num), "byte")
-	println("int8 size:", unsafe.Sizeof(num8), "byte")
-	println("int16 size:", unsafe.Sizeof(num16), "byte")
-	println("int32 size:", unsafe.Sizeof(num32), "byte")
-	println("int64 size:", unsafe.Sizeof(num64), "byte")
-	println("*User size:", unsafe.Sizeof(userPtr), "byte")
-	println("*string size:", unsafe.Sizeof(strPtr), "byte")
-	println("*int32 size:", unsafe.Sizeof(num32Ptr), "byte")
-	println("*int64 size:", unsafe.Sizeof(num63Ptr), "byte")
+	ptr("User size:", unsafe.Sizeof(user), "byte")
+	ptr("string size:", unsafe.Sizeof(str), "byte")
+	ptr("int size:", unsafe.Sizeof(num), "byte")
+	ptr("int8 size:", unsafe.Sizeof(num8), "byte")
+	ptr("int16 size:", unsafe.Sizeof(num16), "byte")
+	ptr("int32 size:", unsafe.Sizeof(num32), "byte")
+	ptr("int64 size:", unsafe.Sizeof(num64), "byte")
+	ptr("*User size:", unsafe.Sizeof(userPtr), "byte")
+	ptr("*string size:", unsafe.Sizeof(strPtr), "byte")
+	ptr("*int32 size:", unsafe.Sizeof(num32Ptr), "byte")
+	ptr("*int64 size:", unsafe.Sizeof(num63Ptr), "byte")
 }

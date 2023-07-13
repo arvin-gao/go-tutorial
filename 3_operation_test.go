@@ -5,20 +5,20 @@ import (
 )
 
 func TestOperation(t *testing.T) {
-	println("\"go\" + \"lang\" = ", "go"+"lang")
+	ptr("\"go\" + \"lang\" = ", "go"+"lang")
 
-	println("1+1 =", 1+1)
-	println("1-1 =", 1-1)
-	println("2*2 =", 2*2)
-	println("7%3 =", 7%3)
-	println("7.0/3.0 =", 7.0/3.0)
+	ptr("1+1 =", 1+1)
+	ptr("1-1 =", 1-1)
+	ptr("2*2 =", 2*2)
+	ptr("7%3 =", 7%3)
+	ptr("7.0/3.0 =", 7.0/3.0)
 
-	println("!true:", !true)
-	println("true && false:", true && false)
-	println("true || false:", true || false)
+	ptr("!true:", !true)
+	ptr("true && false:", true && false)
+	ptr("true || false:", true || false)
 
-	println("10 | 4 =", 10|4) // 1010 OR 0100 -> 1110 = 14
-	println("3 & 6 =", 3&6)   // 0011 OR 0110 -> 0010 = 2
+	ptr("10 | 4 =", 10|4) // 1010 OR 0100 -> 1110 = 14
+	ptr("3 & 6 =", 3&6)   // 0011 OR 0110 -> 0010 = 2
 
 	pTitle("比較")
 	pf("10 >  5: %t", 10 > 5)

@@ -37,7 +37,7 @@ func TestStruct(t *testing.T) {
 		Field2: "v2",
 		Field3: "v3",
 	}
-	println(s2.Field1, s2.Field2, s2.Field3, s2.count)
+	ptr(s2.Field1, s2.Field2, s2.Field3, s2.count)
 
 	pass(s, s2)
 }
@@ -54,13 +54,13 @@ func TestDuplicatedField(t *testing.T) {
 	var c C
 	c.A.a = 1
 	c.B.a = 1
-	println(c)
+	ptr(c)
 	// println(c.a) // error!
 
 	c.b = 2
-	println(c.b)
+	ptr(c.b)
 	c.b = 1.1
-	println(c.b)
+	ptr(c.b)
 }
 
 func TestStructTag(t *testing.T) {
@@ -78,7 +78,7 @@ func TestStructTag(t *testing.T) {
 	}
 
 	b, _ := json.MarshalIndent(&u, "", "\t")
-	println(string(b))
+	ptr(string(b))
 
 	// 取得 tag value
 	field, ok := reflect.TypeOf(u).FieldByName("Name")
@@ -86,7 +86,7 @@ func TestStructTag(t *testing.T) {
 		fmt.Printf("field.tag: %s; Json value: %s\n", field.Tag, field.Tag.Get("json"))
 	}
 
-	println("===")
+	ptr("===")
 	uType := reflect.TypeOf(u)
 	for i := 0; i < uType.NumField(); i++ {
 		field := uType.Field(i)
@@ -96,13 +96,13 @@ func TestStructTag(t *testing.T) {
 		}
 
 		if v := string(field.Tag.Get("json")); v != "" {
-			println("has json tag, value:")
+			ptr("has json tag, value:")
 			pfTree("tag: %s", field.Tag)
 			pfTree("value: %s", v)
 		}
 
 		if v := string(field.Tag.Get("gorm")); v != "" {
-			println("has gorm tag, value:")
+			ptr("has gorm tag, value:")
 			pfTree("tag: %s", field.Tag)
 			pfTree("value: %s", v)
 		}
@@ -148,12 +148,12 @@ func TestStructSize(t *testing.T) {
 		A  A
 	}
 
-	println("Empty size:", unsafe.Sizeof(Empty{}))
-	println("A size:", unsafe.Sizeof(A{}))
-	println("B size:", unsafe.Sizeof(B{}))
-	println("C size:", unsafe.Sizeof(C{}))
-	println("D size:", unsafe.Sizeof(D{}))
-	println("E size:", unsafe.Sizeof(E{}))
+	ptr("Empty size:", unsafe.Sizeof(Empty{}))
+	ptr("A size:", unsafe.Sizeof(A{}))
+	ptr("B size:", unsafe.Sizeof(B{}))
+	ptr("C size:", unsafe.Sizeof(C{}))
+	ptr("D size:", unsafe.Sizeof(D{}))
+	ptr("E size:", unsafe.Sizeof(E{}))
 }
 
 type Car struct {
@@ -191,9 +191,9 @@ func TestObjectFeatures(t *testing.T) {
 		DoorCount: 2,
 	}
 
-	println(mySportCar.DoorCount)
-	println(mySportCar.Car.DoorCount)
-	println(mySportCar.Car.DoorCount)
+	ptr(mySportCar.DoorCount)
+	ptr(mySportCar.Car.DoorCount)
+	ptr(mySportCar.Car.DoorCount)
 	mySportCar.Move()
 	mySportCar.Car.Move()
 	mySportCar.CarMethod()

@@ -13,22 +13,22 @@ import (
 
 func TestString(t *testing.T) {
 	s := "Hello, 世界"
-	println("string length:", len(s))
+	ptr("string length:", len(s))
 
 	b := []byte(s)
-	println("[]byte length:", len(b))
+	ptr("[]byte length:", len(b))
 
 	r := []rune(s)
-	println("[]rune length:", len(r))
+	ptr("[]rune length:", len(r))
 
-	println("utf8.RuneCountInString(string):", utf8.RuneCountInString(s))
+	ptr("utf8.RuneCountInString(string):", utf8.RuneCountInString(s))
 
 	print("loop with index: ")
 	for i := 0; i < len(s); i++ {
 		print(s[i], " ") // byte
 	}
 
-	println()
+	ptr()
 	print("loop with range: ")
 	for _, v := range s {
 		print(v, " ") // rune
@@ -40,7 +40,7 @@ func TestStringType(t *testing.T) {
 	str := "abc"
 	c := []byte(str) // []byte{'c', 'b', 'c'}
 
-	println("origin string:", str)
+	ptr("origin string:", str)
 
 	c[0] = 'c'
 
@@ -51,7 +51,7 @@ func TestStringType(t *testing.T) {
 	pTitle("for range the string")
 	pCode("for i, v := range \"abc\"")
 	for i, v := range "abc" {
-		println(i, v)
+		ptr(i, v)
 	}
 
 	// 計算長度

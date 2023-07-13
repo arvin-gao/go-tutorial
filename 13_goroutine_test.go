@@ -19,7 +19,7 @@ func TestGoroutine(t *testing.T) {
 	f := func(str string) {
 		time.Sleep(50 * time.Millisecond)
 		for i := 0; i < 3; i++ {
-			println(str, i)
+			ptr(str, i)
 		}
 	}
 
@@ -27,9 +27,9 @@ func TestGoroutine(t *testing.T) {
 	go f("f2")
 	go f("f3")
 	go f("f4")
-	println("sleeping...")
+	ptr("sleeping...")
 	time.Sleep(time.Second)
-	println("done")
+	ptr("done")
 }
 
 func TestGoroutineWithWaitGroup(t *testing.T) {
@@ -37,7 +37,7 @@ func TestGoroutineWithWaitGroup(t *testing.T) {
 		defer wg.Done()
 		time.Sleep(50 * time.Millisecond)
 		for i := 0; i < 3; i++ {
-			println(str, i)
+			ptr(str, i)
 		}
 	}
 
@@ -48,7 +48,7 @@ func TestGoroutineWithWaitGroup(t *testing.T) {
 	go f(&wg, "f3")
 	go f(&wg, "f4")
 	wg.Wait()
-	println("done")
+	ptr("done")
 }
 
 func TestCounterWithMultiGoroutine(t *testing.T) {
@@ -111,7 +111,7 @@ func TestGoroutineExample(t *testing.T) {
 	var v1 = 123
 	go func(v2 int) {
 		time.Sleep(time.Second)
-		println(v1, v2)
+		ptr(v1, v2)
 	}(v1)
 
 	v1 = 789
@@ -141,35 +141,35 @@ buffered channel
 func TestChannelWithDeadlock(t *testing.T) {
 	// fatal error: all goroutines are asleep - deadlock!
 	unbuffCh <- 1
-	println(<-unbuffCh)
+	ptr(<-unbuffCh)
 }
 
 func TestChannelWithDeadlock2(t *testing.T) {
 	buffCh <- 1
 	// fatal error: all goroutines are asleep - deadlock!
 	buffCh <- 1
-	println(<-buffCh)
+	ptr(<-buffCh)
 }
 
 // if send a msg to closed channel, that will be panic with 'panic: send on closed channel' message.
 func TestChannelWithClose(t *testing.T) {
 	buffCh <- 1
-	println(unsafe.Sizeof(buffCh))
+	ptr(unsafe.Sizeof(buffCh))
 	close(buffCh)
 	// buffCh <- 1
-	println(unsafe.Sizeof(buffCh))
+	ptr(unsafe.Sizeof(buffCh))
 
 }
 
 func TestChannelWithLoop(t *testing.T) {
 	for c := range unbuffCh {
-		println("1-for:", c)
+		ptr("1-for:", c)
 	}
 
 	// check the channel status.
 	for {
 		if c, open := <-unbuffCh; !open {
-			println("2-for:", c)
+			ptr("2-for:", c)
 		}
 	}
 }
@@ -182,7 +182,7 @@ func TestChannelWithRangeLoop(t *testing.T) {
 	close(queue)
 
 	for elem := range queue {
-		println(elem)
+		ptr(elem)
 	}
 }
 
@@ -192,14 +192,14 @@ func TestSingleChannelWithGoroutineLoop(t *testing.T) {
 		for i := 0; i < count; i++ {
 			go func(n int) {
 				buffCh <- n
-				println("bufferedCh <- n:", n)
+				ptr("bufferedCh <- n:", n)
 			}(i)
 		}
 	}()
 
 	var i int
 	for v := range buffCh {
-		println("v:", v)
+		ptr("v:", v)
 		time.Sleep(500 * time.Millisecond)
 		i++
 		if i == count {
@@ -209,9 +209,9 @@ func TestSingleChannelWithGoroutineLoop(t *testing.T) {
 
 	// check the channel status.
 	if v, open := <-buffCh; open {
-		println("is opening. v:", v)
+		ptr("is opening. v:", v)
 	} else {
-		println("not open")
+		ptr("not open")
 	}
 }
 
@@ -236,7 +236,7 @@ func TestChannelWithChannelParamFunc(t *testing.T) {
 	go ping(pings, "passed message")
 	go pong(pings, pongs)
 
-	println(<-pongs)
+	ptr(<-pongs)
 }
 
 /*
@@ -244,7 +244,7 @@ Go’s select lets you wait on multiple channel operations.
 Combining goroutines and channels with select is a powerful feature of Go.
 */
 func TestChannelWithSelect(t *testing.T) {
-	println("setup unbuffered channel")
+	ptr("setup unbuffered channel")
 	c1 := make(chan string)
 	c2 := make(chan string)
 
@@ -266,17 +266,17 @@ func TestChannelWithSelect(t *testing.T) {
 
 		select {
 		case msg1 := <-c1:
-			println("received", msg1)
+			ptr("received", msg1)
 		case msg2 := <-c2:
-			println("received", msg2)
+			ptr("received", msg2)
 		case <-time.After(2 * time.Second):
-			println("timeout")
+			ptr("timeout")
 			isBreak = true
 		}
 	}
 
-	println()
-	println("setup buffered channel")
+	ptr()
+	ptr("setup buffered channel")
 	c1 = make(chan string, 1)
 	c2 = make(chan string, 1)
 
@@ -286,9 +286,9 @@ func TestChannelWithSelect(t *testing.T) {
 	pTitle("single select")
 	select {
 	case msg1 := <-c1:
-		println("received", msg1)
+		ptr("received", msg1)
 	case msg2 := <-c2:
-		println("received", msg2)
+		ptr("received", msg2)
 	}
 
 	pTitle("select with loop")
@@ -299,9 +299,9 @@ func TestChannelWithSelect(t *testing.T) {
 	for {
 		select {
 		case msg1 := <-c1:
-			println("received", msg1)
+			ptr("received", msg1)
 		case msg2 := <-c2:
-			println("received", msg2)
+			ptr("received", msg2)
 		case <-time.After(100 * time.Millisecond):
 			return
 		}
@@ -338,8 +338,8 @@ func TestSyncWithWaitGroupAndMutex(t *testing.T) {
 	}
 	wg.Wait()
 
-	println("counter-1:", c1.v)
-	println("counter-2(lock):", c2.v)
+	ptr("counter-1:", c1.v)
+	ptr("counter-2(lock):", c2.v)
 }
 
 func TestChannelExample(t *testing.T) {
@@ -350,9 +350,9 @@ func TestChannelExample(t *testing.T) {
 		for {
 			v, isOpen := <-jobs
 			if isOpen {
-				println("received job", v)
+				ptr("received job", v)
 			} else {
-				println("received all jobs")
+				ptr("received all jobs")
 				done <- true
 				return
 			}
@@ -361,11 +361,11 @@ func TestChannelExample(t *testing.T) {
 
 	for j := 1; j <= 3; j++ {
 		jobs <- j
-		println("sent job", j)
+		ptr("sent job", j)
 	}
 
 	close(jobs)
-	println("sent all jobs")
+	ptr("sent all jobs")
 
 	<-done
 }
@@ -376,17 +376,17 @@ func TestChannelWithTimer(t *testing.T) {
 	timer1 := time.NewTimer(2 * time.Second)
 
 	<-timer1.C
-	println("Timer 1 fired")
+	ptr("Timer 1 fired")
 
 	timer2 := time.NewTimer(time.Second)
 	go func() {
 		<-timer2.C
-		println("Timer 2 fired")
+		ptr("Timer 2 fired")
 	}()
 
 	stop := timer2.Stop()
 	if stop {
-		println("Timer 2 stopped")
+		ptr("Timer 2 stopped")
 	}
 
 	time.Sleep(2 * time.Second)
@@ -402,10 +402,10 @@ func TestTicker(t *testing.T) {
 		for {
 			select {
 			case <-done:
-				println("done")
+				ptr("done")
 				return
 			case t := <-ticker.C:
-				println("Tick at", t.Format(time.DateTime))
+				ptr("Tick at", t.Format(time.DateTime))
 			}
 		}
 	}()
@@ -413,7 +413,7 @@ func TestTicker(t *testing.T) {
 	time.Sleep(500 * time.Millisecond)
 	ticker.Stop()
 	done <- true
-	println("Ticker stopped")
+	ptr("Ticker stopped")
 }
 
 func TestChannelExample2(t *testing.T) {
@@ -431,11 +431,11 @@ func TestChannelExample2(t *testing.T) {
 	case v := <-ch2:
 		sum += v
 	case <-time.After(100 * time.Millisecond):
-		println("count:", sum)
+		ptr("count:", sum)
 		return
 	}
 
-	println("count:", sum)
+	ptr("count:", sum)
 }
 
 func TestChannelExample3(t *testing.T) {
@@ -453,7 +453,7 @@ func TestChannelExample3(t *testing.T) {
 		case v := <-ch2:
 			sum += v
 		case <-time.After(100 * time.Millisecond):
-			println("count:", sum)
+			ptr("count:", sum)
 			return
 		}
 	}
@@ -483,7 +483,7 @@ func TestWorkerWithGoroutineAndChannel(t *testing.T) {
 	close(jobs)
 
 	for a := 1; a <= numJobs; a++ {
-		println("got result:", <-results)
+		ptr("got result:", <-results)
 	}
 }
 
@@ -516,7 +516,7 @@ func TestGoroutineExample1(t *testing.T) {
 				return
 			}
 
-			println("goroutine01:", string(v))
+			ptr("goroutine01:", string(v))
 
 			next <- struct{}{}
 		}
@@ -535,7 +535,7 @@ func TestGoroutineExample1(t *testing.T) {
 				return
 			}
 
-			println("goroutine02:", string(v))
+			ptr("goroutine02:", string(v))
 
 			next <- struct{}{}
 		}
@@ -566,5 +566,5 @@ func TestLockIncreaseCountByAtomic(t *testing.T) {
 
 	wg.Wait()
 
-	println("ops:", ops)
+	ptr("ops:", ops)
 }

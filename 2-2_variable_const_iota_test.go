@@ -22,14 +22,14 @@ const (
 )
 
 func Test(t *testing.T) {
-	println(_a)
-	println(_b)
-	println(_c)
-	println(_d)
-	println(_e)
-	println(_f)
-	println(_g)
-	println(_h)
+	ptr(_a)
+	ptr(_b)
+	ptr(_c)
+	ptr(_d)
+	ptr(_e)
+	ptr(_f)
+	ptr(_g)
+	ptr(_h)
 }
 
 const (

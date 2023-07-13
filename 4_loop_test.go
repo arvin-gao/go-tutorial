@@ -35,12 +35,12 @@ func TestLoop(t *testing.T) {
 func TestLoopArrayAndSlice(t *testing.T) {
 	nums := []int{1, 2, 3}
 	for index, value := range nums {
-		println(index, value)
+		ptr(index, value)
 		pPtr(&nums[index])
 		pPtr(&value)
 	}
 	for index := range nums {
-		println(index)
+		ptr(index)
 	}
 }
 
@@ -56,11 +56,11 @@ func TestLoopMap(t *testing.T) {
 	}
 	// 順序不一定
 	for key, value := range m {
-		println(key, value)
+		ptr(key, value)
 	}
 
 	for key := range m {
-		println(key)
+		ptr(key)
 	}
 }
 
@@ -68,6 +68,6 @@ func TestLoopChannel(t *testing.T) {
 	ch := make(chan string, 1)
 	ch <- "range channel"
 	for x := range ch {
-		println(x)
+		ptr(x)
 	}
 }

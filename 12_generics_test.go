@@ -43,7 +43,7 @@ func (lst *List[T]) GetAll() []T {
 func TestGenerics(t *testing.T) {
 	var m = map[int]string{1: "2", 2: "4", 4: "8"}
 
-	println("keys:", MapKeys(m))
+	ptr("keys:", MapKeys(m))
 
 	_ = MapKeys[int, string](m)
 
@@ -51,5 +51,5 @@ func TestGenerics(t *testing.T) {
 	lst.Push(10)
 	lst.Push(13)
 	lst.Push(23)
-	println("list:", lst.GetAll())
+	ptr("list:", lst.GetAll())
 }

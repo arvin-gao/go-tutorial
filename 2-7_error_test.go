@@ -34,19 +34,19 @@ func (e *argError) Error() string {
 }
 
 func TestError(t *testing.T) {
-	println(errInvalid)
+	ptr(errInvalid)
 	for _, i := range []int{7, 42} {
 		if r, err := f1(i); err != nil {
-			println("f1 failed:", err)
+			ptr("f1 failed:", err)
 		} else {
-			println("f1 worked:", r)
+			ptr("f1 worked:", r)
 		}
 	}
 
 	_, err := f2(42)
 	if myErr, ok := err.(*argError); ok {
-		println(myErr.arg)
-		println(myErr.prob)
+		ptr(myErr.arg)
+		ptr(myErr.prob)
 	}
 }
 

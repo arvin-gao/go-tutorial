@@ -17,12 +17,12 @@ func TestMap(t *testing.T) {
 	pass(m11, m22)
 
 	m1["K1"] = 7
-	println(m1["k1"])
+	ptr(m1["k1"])
 
 	// map length.
-	println("m2 length:", len(m2))
+	ptr("m2 length:", len(m2))
 	m2[1] = "a"
-	println("m2 length:", len(m2))
+	ptr("m2 length:", len(m2))
 
 	m3[true] = User{}
 
@@ -30,14 +30,14 @@ func TestMap(t *testing.T) {
 	val := m22["k2"]
 	val, isExist := m22["k2"]
 	if isExist {
-		println("has key, value:", val) // 2
+		ptr("has key, value:", val) // 2
 	} else {
-		println("non key, value:", val) // 0
+		ptr("non key, value:", val) // 0
 	}
 
 	// delete the key.
 	delete(m1, "k1")
-	println("k1 value:", m1["k1"])
+	ptr("k1 value:", m1["k1"])
 }
 
 /*
@@ -56,7 +56,7 @@ func TestMap2(t *testing.T) {
 
 	len2 := len(m)
 
-	println(len1, len2)
+	ptr(len1, len2)
 }
 
 func TestChangeMapValue(t *testing.T) {
@@ -101,7 +101,7 @@ func TestConcurrencyMap(t *testing.T) {
 	}()
 
 	wg.Wait()
-	println(builtinMap["key"])
+	ptr(builtinMap["key"])
 }
 
 func TestSyncMap(t *testing.T) {
@@ -112,7 +112,7 @@ func TestSyncMap(t *testing.T) {
 	safeMap.Store("k1", "v1")
 	safeMap.Store("k2", "v2")
 	v, ok := safeMap.Load("k1")
-	println(v, ok)
+	ptr(v, ok)
 	return
 	wg.Add(2)
 	// issue: fatal error: concurrent map writes

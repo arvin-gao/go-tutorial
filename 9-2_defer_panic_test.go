@@ -27,18 +27,18 @@ close that connection and continue serving other clients.
 */
 func TestPanicWithRecover(t *testing.T) {
 	defer func() {
-		println("done 2")
+		ptr("done 2")
 		if v := recover(); v != nil {
-			println("recover 2:", v)
+			ptr("recover 2:", v)
 		}
 	}()
 
-	println("start")
+	ptr("start")
 
 	defer func() {
-		println("done 1")
+		ptr("done 1")
 		if v := recover(); v != nil {
-			println("recover 1:", v)
+			ptr("recover 1:", v)
 		}
 	}()
 
@@ -53,11 +53,11 @@ func TestPanicWithRecover(t *testing.T) {
 */
 func TestDeferAndRecoverMechanism(t *testing.T) {
 	defer func() {
-		println(recover())
+		ptr(recover())
 	}()
 
 	defer func() {
-		defer println(recover())
+		defer ptr(recover())
 		defer panic(1)
 		recover()
 	}()
@@ -76,7 +76,7 @@ The the panic 1 is never recovered, but it is suppressed by the panic 2.
 */
 func TestMoreReferAndRecover(t *testing.T) {
 	defer func() {
-		println(recover().(int)) // 1
+		ptr(recover().(int)) // 1
 	}()
 
 	defer func() {

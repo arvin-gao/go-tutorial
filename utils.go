@@ -8,7 +8,7 @@ import (
 func pass(v ...any) {
 }
 
-func println(v ...any) {
+func ptr(v ...any) {
 	fmt.Println(v...)
 }
 
@@ -19,12 +19,12 @@ func pTitle(title string) {
 	totalLen := len([]rune(title))
 
 	if totalLen > maxCharLen {
-		println(repeatMark(mark, 2), title, repeatMark(mark, 2))
+		ptr(repeatMark(mark, 2), title, repeatMark(mark, 2))
 	}
 
 	markCount := (maxCharLen - totalLen) / 2
 
-	println(repeatMark(mark, markCount), title, repeatMark(mark, markCount))
+	ptr(repeatMark(mark, markCount), title, repeatMark(mark, markCount))
 }
 
 func repeatMark(mark string, count int) string {
@@ -32,7 +32,7 @@ func repeatMark(mark string, count int) string {
 }
 
 func pCode(code string) {
-	println("> " + code)
+	ptr("> " + code)
 }
 
 func pfTree(format string, v ...any) {

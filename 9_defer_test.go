@@ -1,6 +1,7 @@
 package gotutorial
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -8,46 +9,45 @@ import (
 Defer is used to ensure that a function call is performed
 later in a program’s execution, usually for purposes of cleanup.
 */
-func TestDefer(t *testing.T) {
-
-}
+// FILO. First in last out.
 
 func TestDeferExample1(t *testing.T) {
-	var a int
-	a = 10
-	defer println("example. ", a*a)
-	a = 20
+	enter("example-1")
+	defer leave("example-1")
 	deferB()
-	a = 30
 }
 
 func deferB() {
-	trace("b")
-	defer unTrace("b")
-	println("in b")
+	enter("b")
+	defer leave("b")
+	ptr("process b")
 	deferA()
 }
 
 func deferA() {
-	trace("a")
-	defer unTrace("a")
-	println("in a")
+	enter("a")
+	defer leave("a")
+	ptr("process a")
 }
 
-func trace(s string)   { println("entering:", s) }
-func unTrace(s string) { println("leaving:", s) }
+func enter(s string) { ptr("entering:", s) }
+func leave(s string) { ptr("leaving:", s) }
 
 func TestDeferExample2(t *testing.T) {
 	a := 1
 	b := 2
-	defer calc("1", &a, calc("10", &a, b))
-	a = 0
-	defer calc("2", &a, calc("20", &a, b))
-	b = 1
+	defer calc("1-1", &a, calc("1-2", &a, b))
+	ptr("[0-1]")
+	a = 2
+	b = 3
+	defer calc("2-1", &a, calc("2-2", &a, b))
+	a = 3
+	b = 4
+	ptr("[0-2]")
 }
 
 func calc(index string, a *int, b int) int {
 	ret := *a + b
-	println(index, *a, b, ret)
+	fmt.Printf("[%s]: a=%d, b=%d, a+b=%d\n", index, *a, b, ret)
 	return ret
 }

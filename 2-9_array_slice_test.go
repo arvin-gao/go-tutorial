@@ -16,7 +16,7 @@ func TestArray(t *testing.T) {
 		{2, 3, 4},
 		{3, 4, 5},
 	}
-	println(arr1, arr2, arr3, arr4, arr5)
+	ptr(arr1, arr2, arr3, arr4, arr5)
 	arr1[0] = 2
 	// len cap
 	fmt.Printf("var arr1 [2]int -> len:%d, cap:%d\n", len(arr1), cap(arr1))
@@ -165,9 +165,9 @@ func TestSliceExample1(t *testing.T) {
 
 	s1[2] = 20
 
-	println(s1)
-	println(s2)
-	println(slice)
+	ptr(s1)
+	ptr(s2)
+	ptr(slice)
 }
 
 func TestSliceExample2(t *testing.T) {
@@ -181,13 +181,13 @@ func TestSliceExample2(t *testing.T) {
 	}
 
 	slice := make([]int, 5)
-	println("origin slice[0]: ", slice[0])
+	ptr("origin slice[0]: ", slice[0])
 
 	changeFirstBeforeAppend(slice)
-	println("changeFirstBeforeAppend slice[0]: ", slice[0])
+	ptr("changeFirstBeforeAppend slice[0]: ", slice[0])
 
 	changeFirst(slice)
-	println("changeFirst slice[0]: ", slice[0])
+	ptr("changeFirst slice[0]: ", slice[0])
 }
 
 func TestSliceExample3(t *testing.T) {
@@ -198,8 +198,8 @@ func TestSliceExample3(t *testing.T) {
 	s := []int{1, 1, 1}
 	newS := myAppend(s)
 
-	println(s)
-	println(newS)
+	ptr(s)
+	ptr(newS)
 
 	s = newS
 
@@ -207,7 +207,7 @@ func TestSliceExample3(t *testing.T) {
 		*s = append(*s, 100)
 	}
 	myAppendPtr(&s)
-	println(s)
+	ptr(s)
 }
 
 func TestSliceExample4(t *testing.T) {
@@ -246,9 +246,9 @@ func TestSliceExample4(t *testing.T) {
 	s = append(s, 4)
 	print("s: ")
 	pPtr(s)
-	println("s:", s)
-	println("x:", x)
-	println("y:", y)
+	ptr("s:", s)
+	ptr("x:", x)
+	ptr("y:", y)
 	pCode("s = append(s, 5)")
 	s = append(s, 5)
 	print("s: ")
@@ -262,7 +262,7 @@ func TestSliceExample5(t *testing.T) {
 	y := a[2:]
 	x = append(x, y...)
 	x = append(x, y...)
-	println(a, x)
+	ptr(a, x)
 }
 
 func TestSliceExample6(t *testing.T) {

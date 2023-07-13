@@ -17,9 +17,9 @@ func TestTemp(t *testing.T) {
 
 	var a int
 	if a = 10; a > 9 {
-		println("1", a)
+		ptr("1", a)
 	}
-	println(a)
+	ptr(a)
 }
 
 type Obj struct {
@@ -38,7 +38,7 @@ func TestTemp2(t *testing.T) {
 	var v Obj
 	fmt.Printf("v: %p\n", &v)
 	v.printObjWithPointer()
-	println()
+	ptr()
 	v.printObjWithoutPointer()
 	v.printObjWithoutPointer()
 }

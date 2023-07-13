@@ -13,42 +13,42 @@ func TestFunction(t *testing.T) {
 	simpleFunc(1, 2, "v3", slice...)
 
 	v1, v2 := simpleFunc2()
-	println(v1, v2)
-	println(simpleFunc2())
+	ptr(v1, v2)
+	ptr(simpleFunc2())
 
 	pTitle("匿名函式")
 	func() {
-		println("1")
+		ptr("1")
 	}()
 
 	func1 := func(x int) int {
 		return x + 1
 	}
-	println(func1(2))
+	ptr(func1(2))
 
 	vByFunc := func(x int) int {
 		return x + 1
 	}(3)
-	println(vByFunc)
+	ptr(vByFunc)
 
 	pTitle("function 當作參數傳遞")
 	sendFunc(func(x int) int {
-		println("this is my x:", x)
+		ptr("this is my x:", x)
 		return x + 123
 	})
 
 	// 閉包
 	f := closures()
-	println("f(1):", f(1))
-	println("f(2):", f(2))
+	ptr("f(1):", f(1))
+	ptr("f(2):", f(2))
 
 	// 遞迴
-	println("fib(7):", fib(3))
+	ptr("fib(7):", fib(3))
 }
 
 func closures() func(b int) int {
 	var num int
-	println("closure init, num address:", &num)
+	ptr("closure init, num address:", &num)
 	return func(n int) int {
 		num++
 		pf("num(%p): %d", &num, num)
@@ -65,7 +65,7 @@ func fib(n int) int {
 }
 
 func sendFunc(f func(int) int) {
-	println(f(10))
+	ptr(f(10))
 }
 
 func simpleFunc(v, v2 int, v3 string, strSlice ...string) (int, int, string) {
@@ -74,7 +74,7 @@ func simpleFunc(v, v2 int, v3 string, strSlice ...string) (int, int, string) {
 	z := v3 + "hi"
 
 	for _, v := range strSlice {
-		println(v)
+		ptr(v)
 	}
 
 	return x, y, z
@@ -87,7 +87,7 @@ func simpleFunc2() (x, y int) {
 }
 
 func TestAliasFunction(t *testing.T) {
-	var p = println
+	var p = ptr
 
 	myFunc := func() {
 		p("my function")

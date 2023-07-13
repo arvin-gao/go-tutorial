@@ -33,46 +33,46 @@ func TestSwitch(t *testing.T) {
 	var num = 11
 	switch num {
 	case 9:
-		println("num == 9")
+		ptr("num == 9")
 	case 10, 11:
-		println("num == 10 or 11")
+		ptr("num == 10 or 11")
 	default:
-		println("num != 9 && num != 10")
+		ptr("num != 9 && num != 10")
 	}
 
 	switch num {
 	case 10, 11:
-		println("num == 10 or 11")
+		ptr("num == 10 or 11")
 		fallthrough
 	case 12:
-		println("12")
+		ptr("12")
 	case 13:
-		println("13")
+		ptr("13")
 	default:
-		println("num != 9 && num != 10")
+		ptr("num != 9 && num != 10")
 	}
 
 	// any or interface type
 	var v any = num
 	switch myType := v.(type) {
 	case int:
-		println("v is int")
+		ptr("v is int")
 	case int64:
-		println("v is int64")
+		ptr("v is int64")
 	case string:
-		println("v is string")
+		ptr("v is string")
 	default:
-		println("my type is:", myType)
+		ptr("my type is:", myType)
 	}
 
 	num = 10
 	switch {
 	case num > 0 && num < 9:
-		println("num > 0 && num < 9")
+		ptr("num > 0 && num < 9")
 	case num > 9:
-		println("num > 9")
+		ptr("num > 9")
 	case num == 10:
-		println("num == 10")
+		ptr("num == 10")
 	}
 
 	// enum
@@ -84,29 +84,29 @@ func TestSwitch(t *testing.T) {
 	var req = enum1
 	switch req {
 	case enum1:
-		println("req == enum1")
+		ptr("req == enum1")
 	case enum2:
-		println("req == enum2")
+		ptr("req == enum2")
 	}
 }
 
 func TestConditionVariable(t *testing.T) {
 	var a = 1
-	println("a =", a)
+	ptr("a =", a)
 	if a := 2; a == 2 {
-		println(a)
+		ptr(a)
 		a = 3
-		println(a)
+		ptr(a)
 	}
-	println("a =", a)
+	ptr("a =", a)
 
 	if a = 4; a == 4 {
 		pass()
 	}
-	println("a =", a)
+	ptr("a =", a)
 
 	if a = 5; a == 5 {
 		a = 6
 	}
-	println("a =", a)
+	ptr("a =", a)
 }

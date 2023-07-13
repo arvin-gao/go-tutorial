@@ -19,5 +19,4 @@ func TestRoundFloat(t *testing.T) {
 	fmt.Printf("%f\n", math.Round(n_num)) // -5.000000(Round)
 	fmt.Printf("%f\n", math.Ceil(n_num))  // -5.000000(Ceil)
 	fmt.Printf("%f\n", math.Floor(n_num)) // -6.000000(Floor)
-
 }
