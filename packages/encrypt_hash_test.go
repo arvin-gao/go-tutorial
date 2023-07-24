@@ -1,9 +1,13 @@
 package packages
 
 import (
+	"crypto/rand"
 	"crypto/sha256"
 	b64 "encoding/base64"
+	"fmt"
 	"testing"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func TestSha256(t *testing.T) {
@@ -33,4 +37,35 @@ func TestBase64(t *testing.T) {
 	pln(uEnc)
 	uDec, _ := b64.URLEncoding.DecodeString(uEnc)
 	pln(string(uDec))
+}
+
+func TestBcrypt(t *testing.T) {
+	password := "password"
+	password = saltPassword(password)
+	hash, err := hashPassword(password)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Password: %v\nHash: %v\n", password, hash)
+
+	isMatch := checkPasswordHash(password, hash)
+	fmt.Println("Match: ", isMatch)
+}
+
+func saltPassword(password string) string {
+	saltLen := 10
+	salt := make([]byte, saltLen)
+	rand.Read(salt)
+	return password + string(salt)
+}
+
+func hashPassword(password string) (string, error) {
+	cost := 14
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), cost)
+	return string(bytes), err
+}
+
+func checkPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
