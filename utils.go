@@ -6,10 +6,20 @@ import (
 )
 
 func pass(v ...any) {
+	// nothing to do here.
 }
 
 func ptr(v ...any) {
 	fmt.Println(v...)
+}
+
+// ptrf() is an alias for fmt.Printf() function.
+func ptrf(format string, v ...any) {
+	fmt.Printf(strings.TrimSpace(format)+"\n", v...)
+}
+
+func pPtr(v any) {
+	fmt.Printf("%p\n", v)
 }
 
 func pTitle(title string) {
@@ -40,14 +50,6 @@ func pfTree(format string, v ...any) {
 	fmt.Printf(format, v...)
 }
 
-func pf(format string, v ...any) {
-	fmt.Printf(strings.TrimSpace(format)+"\n", v...)
-}
-
 func pSliceLenAndCap(slice []int) {
 	pfTree("len(%d), cap(%d)", len(slice), cap(slice))
-}
-
-func pPtr(v any) {
-	fmt.Printf("%p\n", v)
 }

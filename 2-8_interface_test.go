@@ -67,11 +67,11 @@ type Dog struct {
 }
 
 func (d *Dog) Eat() {
-	pf("dog %s is eating\n", d.Name)
+	ptrf("dog %s is eating\n", d.Name)
 }
 
 func (d *Dog) Run() {
-	pf("dog %s is running\n", d.Name)
+	ptrf("dog %s is running\n", d.Name)
 }
 
 type Cat struct {
@@ -79,11 +79,11 @@ type Cat struct {
 }
 
 func (d *Cat) Eat() {
-	pf("cat %s is eating\n", d.Name)
+	ptrf("cat %s is eating\n", d.Name)
 }
 
 func (d *Cat) Run() {
-	pf("cat %s is running\n", d.Name)
+	ptrf("cat %s is running\n", d.Name)
 }
 
 func ShowEat(animal Animal) {

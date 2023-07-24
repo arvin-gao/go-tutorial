@@ -462,9 +462,9 @@ func TestChannelExample3(t *testing.T) {
 func TestWorkerWithGoroutineAndChannel(t *testing.T) {
 	worker := func(id int, jobs <-chan int, results chan<- int) {
 		for j := range jobs {
-			pf("worker-%d started  job-%d", id, j)
+			ptrf("worker-%d started  job-%d", id, j)
 			time.Sleep(time.Second)
-			pf("worker-%d finished  job-%d", id, j)
+			ptrf("worker-%d finished  job-%d", id, j)
 			results <- j * 2
 		}
 	}

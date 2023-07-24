@@ -51,7 +51,7 @@ func closures() func(b int) int {
 	ptr("closure init, num address:", &num)
 	return func(n int) int {
 		num++
-		pf("num(%p): %d", &num, num)
+		ptrf("num(%p): %d", &num, num)
 		return num + n
 	}
 }

@@ -127,7 +127,7 @@ func TestStringWithDecodeRune(t *testing.T) {
 	s := "hi 你好"
 	for i, w := 0, 0; i < len(s); i += w {
 		runeV, size := utf8.DecodeRuneInString(s[i:])
-		pf("%#U starts at %d, size: %d\n", runeV, i, size)
+		ptrf("%#U starts at %d, size: %d\n", runeV, i, size)
 		w = size
 	}
 }

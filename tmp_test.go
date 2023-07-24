@@ -50,8 +50,8 @@ func TestTemp3(t *testing.T) {
 			fmt.Print(val, " ")
 		}(values[ix])
 	}
-
 }
+
 func TestPf(t *testing.T) {
-	pf("as%d", 12)
+	ptrf("as%d", 12)
 }

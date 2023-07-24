@@ -75,7 +75,7 @@ func TestChangeMapValue(t *testing.T) {
 	user1.Age = 12
 	m1["user1"] = user1
 
-	pf("%+v\n%+v", m1["user1"], m2["user1"])
+	ptrf("%+v\n%+v", m1["user1"], m2["user1"])
 }
 
 // TODO: advance.
