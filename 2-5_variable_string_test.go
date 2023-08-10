@@ -45,7 +45,7 @@ func TestStringType(t *testing.T) {
 	c[0] = 'c'
 
 	pCode("c[0] = 'c'")
-	pfTree("%s", c)
+	ptrfTree("%s", c)
 
 	// 使用 for range
 	pTitle("for range the string")
@@ -58,9 +58,9 @@ func TestStringType(t *testing.T) {
 	pTitle("string length")
 	str = "你好 abc"
 	pCode("str = \"你好 abc\"")
-	pfTree("len(str): %d", len(str))
-	pfTree("len([]rune(str)): %d", len([]rune(str)))
-	pfTree("utf8.RuneCountInString(str): %d", utf8.RuneCountInString(str))
+	ptrfTree("len(str): %d", len(str))
+	ptrfTree("len([]rune(str)): %d", len([]rune(str)))
+	ptrfTree("utf8.RuneCountInString(str): %d", utf8.RuneCountInString(str))
 
 	// 連接字串
 	pTitle("string concatenation")
@@ -68,12 +68,12 @@ func TestStringType(t *testing.T) {
 	pCode("str +=\"abc\"")
 	str = ""
 	str += "abc"
-	pfTree("str: %s", str)
+	ptrfTree("str: %s", str)
 	var strBuf strings.Builder
 	pCode("var strBuf strings.Builder")
 	pCode("strBuf.WriteString(\"test\")")
 	strBuf.WriteString("test")
-	pfTree("strBuf.String(): %s", strBuf.String())
+	ptrfTree("strBuf.String(): %s", strBuf.String())
 
 	// TODO: wait
 	// 地址變化
@@ -84,10 +84,10 @@ func TestStringType(t *testing.T) {
 		buf.WriteString(strings.Repeat("a", count))
 	}
 	printStringLenAndCap := func(str *string) {
-		pfTree("len: %d, cap: %d", len(*str), cap([]byte(*str)))
+		ptrfTree("len: %d, cap: %d", len(*str), cap([]byte(*str)))
 	}
 	printBufLenAndCap := func(buf *strings.Builder) {
-		pfTree("len: %d, cap: %d", strBuf.Len(), strBuf.Cap())
+		ptrfTree("len: %d, cap: %d", strBuf.Len(), strBuf.Cap())
 	}
 	pTitle("string growing")
 

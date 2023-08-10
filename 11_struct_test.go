@@ -97,14 +97,14 @@ func TestStructTag(t *testing.T) {
 
 		if v := string(field.Tag.Get("json")); v != "" {
 			ptr("has json tag, value:")
-			pfTree("tag: %s", field.Tag)
-			pfTree("value: %s", v)
+			ptrfTree("tag: %s", field.Tag)
+			ptrfTree("value: %s", v)
 		}
 
 		if v := string(field.Tag.Get("gorm")); v != "" {
 			ptr("has gorm tag, value:")
-			pfTree("tag: %s", field.Tag)
-			pfTree("value: %s", v)
+			ptrfTree("tag: %s", field.Tag)
+			ptrfTree("value: %s", v)
 		}
 
 	}

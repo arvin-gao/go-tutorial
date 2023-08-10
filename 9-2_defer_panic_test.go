@@ -14,6 +14,16 @@ func TestPanic(t *testing.T) {
 	panic("panic message")
 }
 
+func TestCallRecoverTwice(t *testing.T) {
+	defer func() {
+		ptr("1:", recover())
+	}()
+	defer func() {
+		ptr("2:", recover())
+	}()
+	panic("panic!")
+}
+
 /*
 Recover can stop a panic from aborting the program and let
 it continue with execution instead
@@ -76,12 +86,12 @@ The the panic 1 is never recovered, but it is suppressed by the panic 2.
 */
 func TestMoreReferAndRecover(t *testing.T) {
 	defer func() {
-		ptr(recover().(int)) // 1
+		ptr(recover().(int))
 	}()
 
 	defer func() {
 		defer func() {
-			recover() // 2
+			recover()
 		}()
 		defer recover()
 		panic(3)

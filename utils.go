@@ -5,17 +5,20 @@ import (
 	"strings"
 )
 
+var ptrPrefix = ""
+
 func pass(v ...any) {
 	// nothing to do here.
 }
 
 func ptr(v ...any) {
+	fmt.Print(ptrPrefix)
 	fmt.Println(v...)
 }
 
 // ptrf() is an alias for fmt.Printf() function.
 func ptrf(format string, v ...any) {
-	fmt.Printf(strings.TrimSpace(format)+"\n", v...)
+	fmt.Printf(ptrPrefix+strings.TrimSpace(format)+"\n", v...)
 }
 
 func pPtr(v any) {
@@ -23,6 +26,7 @@ func pPtr(v any) {
 }
 
 func pTitle(title string) {
+	ptrPrefix = ""
 	mark := "="
 	maxCharLen := 25
 
@@ -41,15 +45,32 @@ func repeatMark(mark string, count int) string {
 	return strings.Repeat(mark, count)
 }
 
+func ptrSubject(title any) {
+	ptrPrefix = "* "
+	ptr(title)
+	ptrPrefix = strings.Repeat(" ", 2)
+}
+
 func pCode(code string) {
 	ptr("> " + code)
 }
 
-func pfTree(format string, v ...any) {
+func pCode2(code string) {
+	str := strings.Split(code, "\n")
+	ptr("[Code]:")
+	space := strings.Repeat(" ", 2)
+	for _, s := range str {
+		print(space)
+		ptr(s)
+	}
+}
+
+func ptrfTree(format string, v ...any) {
 	format = "\t\t|_ " + format + "\n"
 	fmt.Printf(format, v...)
 }
 
-func pSliceLenAndCap(slice []int) {
-	pfTree("len(%d), cap(%d)", len(slice), cap(slice))
+func ptrSliceLenAndCap(slice []int) {
+	ptrf("len: %d", len(slice))
+	ptrf("cap: %d", cap(slice))
 }
