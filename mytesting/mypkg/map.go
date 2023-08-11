@@ -1,4 +1,4 @@
-package main
+package mypkg
 
 type myStrMap struct {
 	m map[string]int
