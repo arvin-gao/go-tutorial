@@ -3,6 +3,7 @@ package gotutorial
 import (
 	"fmt"
 	"strings"
+	"unicode/utf8"
 )
 
 var ptrPrefix = ""
@@ -30,10 +31,11 @@ func pTitle(title string) {
 	mark := "="
 	maxCharLen := 25
 
-	totalLen := len([]rune(title))
+	totalLen := utf8.RuneCountInString(title)
 
 	if totalLen > maxCharLen {
 		ptr(repeatMark(mark, 2), title, repeatMark(mark, 2))
+		return
 	}
 
 	markCount := (maxCharLen - totalLen) / 2

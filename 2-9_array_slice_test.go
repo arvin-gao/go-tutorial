@@ -1,6 +1,8 @@
 package gotutorial
 
 import (
+	"bytes"
+	"fmt"
 	"testing"
 )
 
@@ -167,6 +169,26 @@ func TestSlice(t *testing.T) {
 	ptrf("slice1[0]: %d, addr: %p", slice1[0], &slice1[0])
 }
 
+func TestSliceAdvance(t *testing.T) {
+	pTitle("This behavior can lead to unexpected memory usage.")
+	data := func() []int {
+		raw := make([]int, 10000)
+		ptrSubject("make slice")
+		ptr("len(raw):", len(raw))
+		ptr("cap(raw):", cap(raw))
+		ptr("&raw[0]:", &raw[0])
+		return raw[:3]
+		// Solution.
+		// res := make([]int, 3)
+		// copy(res, raw[:3])
+		// return res
+	}()
+	ptrSubject("data")
+	ptr("len(data):", len(data)) // 3
+	ptr("cap(data):", cap(data)) // 10000
+	ptr("&data[0]:", &data[0])
+}
+
 func TestSliceExample1(t *testing.T) {
 	slice := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 	s1 := slice[2:5]
@@ -286,4 +308,71 @@ func TestSliceExample6(t *testing.T) {
 		x = append(x, "Z")
 		x[i+1] = "Z"
 	}
+}
+
+func TestDirPathProblem(t *testing.T) {
+	pTitle("Both slices referenced the same underlying array data from the original slice")
+	path := []byte("AAAA/BBBBBBBBB")
+	sepIndex := bytes.IndexByte(path, '/')
+	dir1 := path[:sepIndex]
+	dir2 := path[sepIndex+1:]
+	ptrSubject("path := []byte(\"AAAA/BBBBBBBBB\")")
+	ptrfTree("sepIndex := bytes.IndexByte(path, '/')")
+	ptrfTree("val: %s", string(path))
+	ptrfTree("len: %d", len(path))
+	ptrfTree("cap: %d", cap(path))
+	ptr("dir1 := path[:sepIndex]")
+	ptrfTree("val: %s", string(dir1))
+	ptrfTree("len: %d", len(dir1))
+	ptrfTree("cap: %d", cap(dir1))
+	ptr("dir2 := path[sepIndex+1:]")
+	ptrfTree("val: %s", string(dir2))
+	ptrfTree("len: %d", len(dir2))
+	ptrfTree("cap: %d", cap(dir2))
+
+	dir1 = append(dir1, "suffix"...)
+	path = bytes.Join([][]byte{dir1, dir2}, []byte{'/'})
+	ptr("dir1")
+	ptrfTree("val:", string(dir1))
+	ptrfTree("len:", len(dir1))
+	ptrfTree("cap:", cap(dir1))
+	ptr("dir2")
+	ptrfTree("val:", string(dir2))
+	ptrfTree("len:", len(dir2))
+	ptrfTree("cap:", cap(dir2))
+	ptr("new path =>", string(path))
+}
+
+func TestOldSliceProblem(t *testing.T) {
+	s1 := []int{1, 2, 3}
+	fmt.Println(len(s1), cap(s1), s1) // 3 3 [1 2 3]
+	s2 := s1[1:]
+	fmt.Println(len(s2), cap(s2), s2) // 2 2 [2 3]
+	for i := range s2 {
+		s2[i] += 20
+	}
+	fmt.Println(s1) // [1 22 23]
+	fmt.Println(s2) // [22 23]
+
+	s2 = append(s2, 4)
+	for i := range s2 {
+		s2[i] += 10
+	}
+	fmt.Println(s1) // [1 22 23]
+	fmt.Println(s2) // [32 33 14]
+}
+
+func TestT1(t *testing.T) {
+}
+
+type data2 struct {
+	name string
+}
+
+func (p *data2) print() {
+	fmt.Println("name:", p.name)
+}
+
+type printer interface {
+	print()
 }
