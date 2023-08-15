@@ -8,34 +8,34 @@ import (
 
 func TestRegular(t *testing.T) {
 	match, _ := regexp.MatchString("p([a-z]+)ch", "peach")
-	pln(match)
+	ptr(match)
 
 	r, _ := regexp.Compile("p([a-z]+)ch")
 
-	pln(r.MatchString("peach"))
+	ptr(r.MatchString("peach"))
 
-	pln(r.FindString("peach punch"))
+	ptr(r.FindString("peach punch"))
 
-	pln("idx:", r.FindStringIndex("peach punch"))
+	ptr("idx:", r.FindStringIndex("peach punch"))
 
-	pln(r.FindStringSubmatch("peach punch"))
+	ptr(r.FindStringSubmatch("peach punch"))
 
-	pln(r.FindStringSubmatchIndex("peach punch"))
+	ptr(r.FindStringSubmatchIndex("peach punch"))
 
-	pln(r.FindAllString("peach punch pinch", -1))
+	ptr(r.FindAllString("peach punch pinch", -1))
 
-	pln("all:", r.FindAllStringSubmatchIndex("peach punch pinch", -1))
+	ptr("all:", r.FindAllStringSubmatchIndex("peach punch pinch", -1))
 
-	pln(r.FindAllString("peach punch pinch", 2))
+	ptr(r.FindAllString("peach punch pinch", 2))
 
-	pln(r.Match([]byte("peach")))
+	ptr(r.Match([]byte("peach")))
 
 	r = regexp.MustCompile("p([a-z]+)ch")
-	pln("regexp:", r)
+	ptr("regexp:", r)
 
-	pln(r.ReplaceAllString("a peach", "<fruit>"))
+	ptr(r.ReplaceAllString("a peach", "<fruit>"))
 
 	in := []byte("a peach")
 	out := r.ReplaceAllFunc(in, bytes.ToUpper)
-	pln(string(out))
+	ptr(string(out))
 }

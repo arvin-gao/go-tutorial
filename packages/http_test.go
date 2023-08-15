@@ -14,11 +14,11 @@ func TestHttpClient(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	pln("Response status:", resp.Status)
+	ptr("Response status:", resp.Status)
 
 	scanner := bufio.NewScanner(resp.Body)
 	for i := 0; scanner.Scan() && i < 5; i++ {
-		pln(scanner.Text())
+		ptr(scanner.Text())
 	}
 
 	if err := scanner.Err(); err != nil {

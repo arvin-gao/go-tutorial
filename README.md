@@ -24,6 +24,7 @@
   - [Go cli Doc](https://pkg.go.dev/cmd/go)
 - 教學
   - [深度探討 Go - Go101](https://go101.org/)
+  - [50 Shades of Go: Traps, Gotchas, and Common Mistakes for New Golang Devs](https://golang50shad.es/index.html)
   - [Mastering Go 簡體中文](https://github.com/hantmac/Mastering_Go_ZH_CN/blob/master/README.md)
   - [Go-training - github](https://github.com/go-training/training)
 - Blogs

@@ -11,6 +11,7 @@ func TestScopes(t *testing.T) {
 		a := 2
 		b = 2
 		if c = 2; c == 2 {
+			pass()
 		}
 		var d int = 2
 		ptrf("block - a:%d, b:%d, c:%d, d:%d", a, b, c, d)

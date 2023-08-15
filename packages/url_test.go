@@ -14,23 +14,23 @@ func TestUrl(t *testing.T) {
 		panic(err)
 	}
 
-	pln(u.Scheme)
+	ptr(u.Scheme)
 
-	pln(u.User)
-	pln(u.User.Username())
+	ptr(u.User)
+	ptr(u.User.Username())
 	p, _ := u.User.Password()
-	pln(p)
+	ptr(p)
 
-	pln(u.Host)
+	ptr(u.Host)
 	host, port, _ := net.SplitHostPort(u.Host)
-	pln(host)
-	pln(port)
+	ptr(host)
+	ptr(port)
 
-	pln(u.Path)
-	pln(u.Fragment)
+	ptr(u.Path)
+	ptr(u.Fragment)
 
-	pln(u.RawQuery)
+	ptr(u.RawQuery)
 	m, _ := url.ParseQuery(u.RawQuery)
-	pln(m)
-	pln(m["k"][0])
+	ptr(m)
+	ptr(m["k"][0])
 }

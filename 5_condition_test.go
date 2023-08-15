@@ -6,26 +6,45 @@ import (
 
 func TestIfElse(t *testing.T) {
 	if 7%2 == 0 {
-		print("7%2 == 0")
+		ptr("7%2 == 0")
 	} else {
-		print("7%2 != 0")
+		ptr("7%2 != 0")
 	}
 
 	var ok bool = true
 	if ok {
-		print("ok")
+		ptr("ok")
 	}
 
-	if num := 9; num < 0 {
-		print("num < 0")
+	num := 9
+	if num < 0 {
+		ptr("num < 0")
 	} else if num < 10 {
-		print("num < 10")
+		ptr("num < 10")
 	} else {
-		print("num > 10")
+		ptr("num > 10")
 	}
-	var num2 int
-	if num2 = 9; num2 < 0 {
+}
+
+func TestConditionVariable(t *testing.T) {
+	var a = 1
+	ptr(a) // 1
+	if a := 2; a == 2 {
+		ptr(a) // 2
+		a = 3
+		ptr(a) // 3
 	}
+	ptr(a) // 1
+
+	if a = 4; a == 4 {
+		pass()
+	}
+	ptr(a) // 4
+
+	if a = 5; a == 5 {
+		a = 6
+	}
+	ptr(a) // 6
 }
 
 func TestSwitch(t *testing.T) {
@@ -88,25 +107,4 @@ func TestSwitch(t *testing.T) {
 	case enum2:
 		ptr("req == enum2")
 	}
-}
-
-func TestConditionVariable(t *testing.T) {
-	var a = 1
-	ptr("a =", a)
-	if a := 2; a == 2 {
-		ptr(a)
-		a = 3
-		ptr(a)
-	}
-	ptr("a =", a)
-
-	if a = 4; a == 4 {
-		pass()
-	}
-	ptr("a =", a)
-
-	if a = 5; a == 5 {
-		a = 6
-	}
-	ptr("a =", a)
 }

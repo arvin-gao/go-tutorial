@@ -1,6 +1,7 @@
 package gotutorial
 
 import (
+	"errors"
 	"testing"
 )
 
@@ -31,19 +32,30 @@ func TestFunction(t *testing.T) {
 	}(3)
 	ptr(vByFunc)
 
-	pTitle("function 當作參數傳遞")
+	pTitle("Function arg")
 	sendFunc(func(x int) int {
 		ptr("this is my x:", x)
 		return x + 123
 	})
 
 	// 閉包
+	pTitle("Closures")
 	f := closures()
 	ptr("f(1):", f(1))
 	ptr("f(2):", f(2))
 
 	// 遞迴
+	pTitle("Recursion")
 	ptr("fib(7):", fib(3))
+}
+
+func TestFunctionWithCondition(t *testing.T) {
+	f := func() error {
+		return errors.New("testing error")
+	}
+	if err := f(); err != nil {
+		panic(err)
+	}
 }
 
 func closures() func(b int) int {

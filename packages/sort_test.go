@@ -8,14 +8,14 @@ import (
 func TestSort(t *testing.T) {
 	strs := []string{"c", "a", "b"}
 	sort.Strings(strs)
-	pln("Strings:", strs)
+	ptr("Strings:", strs)
 
 	ints := []int{7, 2, 4}
 	sort.Ints(ints)
-	pln("Ints:", ints)
+	ptr("Ints:", ints)
 
 	s := sort.IntsAreSorted(ints)
-	pln("Sorted:", s)
+	ptr("Sorted:", s)
 }
 
 type byLength []string
@@ -33,5 +33,5 @@ func (s byLength) Less(i, j int) bool {
 func TestCustomSort(t *testing.T) {
 	fruits := []string{"peach", "banana", "kiwi"}
 	sort.Sort(byLength(fruits))
-	pln(fruits)
+	ptr(fruits)
 }

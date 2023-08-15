@@ -36,7 +36,7 @@ type Structure struct {
 
 // In this case, the `s := Structure{}` can not measured by this method.
 func memUsage(m1, m2 *runtime.MemStats) {
-	pln("Alloc:", m2.Alloc-m1.Alloc,
+	ptr("Alloc:", m2.Alloc-m1.Alloc,
 		"TotalAlloc:", m2.TotalAlloc-m1.TotalAlloc,
 		"HeapAlloc:", m2.HeapAlloc-m1.HeapAlloc)
 }
@@ -49,20 +49,20 @@ func TestMemory2(t *testing.T) {
 	var s Structure
 	runtime.ReadMemStats(&m2)
 
-	pln("> var s Structure")
-	pln("sizeof(s.uint8)", unsafe.Sizeof(s.UInt8),
+	ptr("> var s Structure")
+	ptr("sizeof(s.uint8)", unsafe.Sizeof(s.UInt8),
 		"offset=", unsafe.Offsetof(s.UInt8))
-	pln("sizeof(s.int)", unsafe.Sizeof(s.Int),
+	ptr("sizeof(s.int)", unsafe.Sizeof(s.Int),
 		"offset=", unsafe.Offsetof(s.Int))
-	pln("sizeof(s.*int)", unsafe.Sizeof(s.PtrInt),
+	ptr("sizeof(s.*int)", unsafe.Sizeof(s.PtrInt),
 		"offset=", unsafe.Offsetof(s.PtrInt))
-	pln("sizeof(s.string)", unsafe.Sizeof(s.Str),
+	ptr("sizeof(s.string)", unsafe.Sizeof(s.Str),
 		"offset=", unsafe.Offsetof(s.Str))
 
-	pln("sizeof(s.[]string)", unsafe.Sizeof(s.SliceStr),
+	ptr("sizeof(s.[]string)", unsafe.Sizeof(s.SliceStr),
 		"offset=", unsafe.Offsetof(s.SliceStr))
 
-	pln("sizeof(s)", unsafe.Sizeof(s))
+	ptr("sizeof(s)", unsafe.Sizeof(s))
 
 	// We will see 0 bytes, because it is on stack, so sizeof is the
 	// proper method to tell how much memory allocated.

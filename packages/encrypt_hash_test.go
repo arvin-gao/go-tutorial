@@ -19,7 +19,7 @@ func TestSha256(t *testing.T) {
 
 	bs := h.Sum(nil)
 
-	pln(s)
+	ptr(s)
 	pf("%x\n", bs)
 }
 
@@ -27,16 +27,16 @@ func TestBase64(t *testing.T) {
 	data := "abc123!?$*&()'-=@~"
 
 	sEnc := b64.StdEncoding.EncodeToString([]byte(data))
-	pln(sEnc)
+	ptr(sEnc)
 
 	sDec, _ := b64.StdEncoding.DecodeString(sEnc)
-	pln(string(sDec))
-	pln()
+	ptr(string(sDec))
+	ptr()
 
 	uEnc := b64.URLEncoding.EncodeToString([]byte(data))
-	pln(uEnc)
+	ptr(uEnc)
 	uDec, _ := b64.URLEncoding.DecodeString(uEnc)
-	pln(string(uDec))
+	ptr(string(uDec))
 }
 
 func TestBcrypt(t *testing.T) {

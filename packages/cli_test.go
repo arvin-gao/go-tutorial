@@ -18,9 +18,9 @@ func TestCliWithArgs(t *testing.T) {
 
 	arg := os.Args[3]
 
-	pln(argsWithoutProg)
-	pln(argsWithProg)
-	pln(arg)
+	ptr(argsWithoutProg)
+	ptr(argsWithProg)
+	ptr(arg)
 }
 
 func TestCliWithFlag(t *testing.T) {
@@ -34,11 +34,11 @@ func TestCliWithFlag(t *testing.T) {
 
 	flag.Parse()
 
-	pln("word:", *wordPtr)
-	pln("numb:", *numbPtr)
-	pln("fork:", *forkPtr)
-	pln("svar:", svar)
-	pln("tail:", flag.Args())
+	ptr("word:", *wordPtr)
+	ptr("numb:", *numbPtr)
+	ptr("fork:", *forkPtr)
+	ptr("svar:", svar)
+	ptr("tail:", flag.Args())
 }
 
 func TestCliSubCommand(t *testing.T) {
@@ -50,7 +50,7 @@ func TestCliSubCommand(t *testing.T) {
 	barLevel := barCmd.Int("level", 0, "level")
 
 	if len(os.Args) < 2 {
-		pln("expected 'foo' or 'bar' subcommands")
+		ptr("expected 'foo' or 'bar' subcommands")
 		os.Exit(1)
 	}
 
@@ -58,30 +58,30 @@ func TestCliSubCommand(t *testing.T) {
 
 	case "foo":
 		fooCmd.Parse(os.Args[2:])
-		pln("subcommand 'foo'")
-		pln("  enable:", *fooEnable)
-		pln("  name:", *fooName)
-		pln("  tail:", fooCmd.Args())
+		ptr("subcommand 'foo'")
+		ptr("  enable:", *fooEnable)
+		ptr("  name:", *fooName)
+		ptr("  tail:", fooCmd.Args())
 	case "bar":
 		barCmd.Parse(os.Args[2:])
-		pln("subcommand 'bar'")
-		pln("  level:", *barLevel)
-		pln("  tail:", barCmd.Args())
+		ptr("subcommand 'bar'")
+		ptr("  level:", *barLevel)
+		ptr("  tail:", barCmd.Args())
 	default:
-		pln("expected 'foo' or 'bar' subcommands")
+		ptr("expected 'foo' or 'bar' subcommands")
 		os.Exit(1)
 	}
 }
 
 func TestEnv(t *testing.T) {
 	os.Setenv("FOO", "1")
-	pln("FOO:", os.Getenv("FOO"))
-	pln("BAR:", os.Getenv("BAR"))
+	ptr("FOO:", os.Getenv("FOO"))
+	ptr("BAR:", os.Getenv("BAR"))
 
-	pln()
+	ptr()
 	for _, e := range os.Environ() {
 		pair := strings.SplitN(e, "=", 2)
-		pln(pair[0])
+		ptr(pair[0])
 	}
 }
 
@@ -92,16 +92,16 @@ func TestCmd(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	pln("> date")
-	pln(string(dateOut))
+	ptr("> date")
+	ptr(string(dateOut))
 
 	_, err = exec.Command("date", "-x").Output()
 	if err != nil {
 		switch e := err.(type) {
 		case *exec.Error:
-			pln("failed executing:", err)
+			ptr("failed executing:", err)
 		case *exec.ExitError:
-			pln("command exit rc =", e.ExitCode())
+			ptr("command exit rc =", e.ExitCode())
 		default:
 			panic(err)
 		}
@@ -117,16 +117,16 @@ func TestCmd(t *testing.T) {
 	grepBytes, _ := io.ReadAll(grepOut)
 	grepCmd.Wait()
 
-	pln("> grep hello")
-	pln(string(grepBytes))
+	ptr("> grep hello")
+	ptr(string(grepBytes))
 
 	lsCmd := exec.Command("bash", "-c", "ls -a -l -h")
 	lsOut, err := lsCmd.Output()
 	if err != nil {
 		panic(err)
 	}
-	pln("> ls -a -l -h")
-	pln(string(lsOut))
+	ptr("> ls -a -l -h")
+	ptr(string(lsOut))
 }
 
 func TestExecProcess(t *testing.T) {
@@ -147,7 +147,7 @@ func TestExecProcess(t *testing.T) {
 
 func TestSignal(t *testing.T) {
 	worker := func() {
-		pln("working")
+		ptr("working")
 	}
 
 	sigs := make(chan os.Signal, 1)
@@ -161,6 +161,6 @@ func TestSignal(t *testing.T) {
 		}
 	}()
 
-	pln("awaiting signal")
-	pln("exiting.", <-sigs)
+	ptr("awaiting signal")
+	ptr("exiting.", <-sigs)
 }

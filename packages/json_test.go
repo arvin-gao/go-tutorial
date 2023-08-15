@@ -19,36 +19,36 @@ func TestJson(t *testing.T) {
 	}
 
 	bolB, _ := json.Marshal(true)
-	pln(string(bolB))
+	ptr(string(bolB))
 
 	intB, _ := json.Marshal(1)
-	pln(string(intB))
+	ptr(string(intB))
 
 	fltB, _ := json.Marshal(2.34)
-	pln(string(fltB))
+	ptr(string(fltB))
 
 	strB, _ := json.Marshal("gopher")
-	pln(string(strB))
+	ptr(string(strB))
 
 	slcD := []string{"apple", "peach", "pear"}
 	slcB, _ := json.Marshal(slcD)
-	pln(string(slcB))
+	ptr(string(slcB))
 
 	mapD := map[string]int{"apple": 5, "lettuce": 7}
 	mapB, _ := json.Marshal(mapD)
-	pln(string(mapB))
+	ptr(string(mapB))
 
 	res1D := &response1{
 		Page:   1,
 		Fruits: []string{"apple", "peach", "pear"}}
 	res1B, _ := json.Marshal(res1D)
-	pln(string(res1B))
+	ptr(string(res1B))
 
 	res2D := &response2{
 		Page:   1,
 		Fruits: []string{"apple", "peach", "pear"}}
 	res2B, _ := json.Marshal(res2D)
-	pln(string(res2B))
+	ptr(string(res2B))
 
 	byt := []byte(`{"num":6.13,"strs":["a","b"]}`)
 
@@ -57,20 +57,20 @@ func TestJson(t *testing.T) {
 	if err := json.Unmarshal(byt, &dat); err != nil {
 		panic(err)
 	}
-	pln(dat)
+	ptr(dat)
 
 	num := dat["num"].(float64)
-	pln(num)
+	ptr(num)
 
 	strs := dat["strs"].([]interface{})
 	str1 := strs[0].(string)
-	pln(str1)
+	ptr(str1)
 
 	str := `{"page": 1, "fruits": ["apple", "peach"]}`
 	res := response2{}
 	json.Unmarshal([]byte(str), &res)
-	pln(res)
-	pln(res.Fruits[0])
+	ptr(res)
+	ptr(res.Fruits[0])
 
 	enc := json.NewEncoder(os.Stdout)
 	d := map[string]int{"apple": 5, "lettuce": 7}

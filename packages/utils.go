@@ -5,7 +5,7 @@ import "fmt"
 var (
 	p   = fmt.Print
 	pf  = fmt.Printf
-	pln = fmt.Println
+	ptr = fmt.Println
 )
 
 func pass(v ...any) {}
