@@ -7,30 +7,49 @@ import (
 )
 
 func TestUrl(t *testing.T) {
-	s := "postgres://user:pass@host.com:5432/path?k=v#f"
+	s := "postgres://myusername:mypassword@host.com:5432/path?k=v#f"
 
 	u, err := url.Parse(s)
 	if err != nil {
-		panic(err)
+		t.Fatal(err)
 	}
+	ptr()
+	ptr(
+		// "postgres://myusername:mypassword@host.com:5432/path?k=v#f"
+		u,
+		// postgres
+		u.Scheme,
+		// myusername:mypassword
+		u.User,
+		// myusername
+		u.User.Username(),
+		// /path
+		u.Path,
+		// f
+		u.Fragment,
+		// k=v
+		u.RawQuery,
+		// host.com:5432
+		u.Host,
+	)
 
-	ptr(u.Scheme)
-
-	ptr(u.User)
-	ptr(u.User.Username())
 	p, _ := u.User.Password()
+	// mypassword
 	ptr(p)
 
-	ptr(u.Host)
 	host, port, _ := net.SplitHostPort(u.Host)
-	ptr(host)
-	ptr(port)
+	ptr(
+		// host.com
+		host,
+		// 5432
+		port,
+	)
 
-	ptr(u.Path)
-	ptr(u.Fragment)
-
-	ptr(u.RawQuery)
 	m, _ := url.ParseQuery(u.RawQuery)
-	ptr(m)
-	ptr(m["k"][0])
+	ptr(
+		// map[k:[v]]
+		m,
+		// v
+		m["k"][0],
+	)
 }

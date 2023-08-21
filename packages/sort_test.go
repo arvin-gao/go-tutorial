@@ -31,7 +31,7 @@ func (s byLength) Less(i, j int) bool {
 }
 
 func TestCustomSort(t *testing.T) {
-	fruits := []string{"peach", "banana", "kiwi"}
-	sort.Sort(byLength(fruits))
+	fruits := byLength{"peach", "banana", "kiwi"}
+	sort.Sort(fruits)
 	ptr(fruits)
 }

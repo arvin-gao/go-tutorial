@@ -361,18 +361,3 @@ func TestOldSliceProblem(t *testing.T) {
 	fmt.Println(s1) // [1 22 23]
 	fmt.Println(s2) // [32 33 14]
 }
-
-func TestT1(t *testing.T) {
-}
-
-type data2 struct {
-	name string
-}
-
-func (p *data2) print() {
-	fmt.Println("name:", p.name)
-}
-
-type printer interface {
-	print()
-}

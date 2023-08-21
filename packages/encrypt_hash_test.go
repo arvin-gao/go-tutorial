@@ -20,7 +20,7 @@ func TestSha256(t *testing.T) {
 	bs := h.Sum(nil)
 
 	ptr(s)
-	pf("%x\n", bs)
+	ptrf("%x\n", bs)
 }
 
 func TestBase64(t *testing.T) {

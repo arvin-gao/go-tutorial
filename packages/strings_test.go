@@ -7,17 +7,30 @@ import (
 
 // refer to: https://gobyexample.com/string-functions
 func TestStrings(t *testing.T) {
-
-	ptr("Contains:  ", strings.Contains("test", "es"))        // Contains:   true
-	ptr("Count:     ", strings.Count("test", "t"))            // Count:      2
-	ptr("HasPrefix: ", strings.HasPrefix("test", "te"))       // HasPrefix:  true
-	ptr("HasSuffix: ", strings.HasSuffix("test", "st"))       // HasSuffix:  true
-	ptr("Index:     ", strings.Index("test", "e"))            // Index:      1
-	ptr("Join:      ", strings.Join([]string{"a", "b"}, "-")) // Join:      a-b
-	ptr("Repeat:    ", strings.Repeat("a", 5))                // Repeat:      aaaaa
-	ptr("Replace:   ", strings.Replace("foo", "o", "0", -1))  // Replace:    f00
-	ptr("Replace:   ", strings.Replace("foo", "o", "0", 1))   // Replace:    f0o
-	ptr("Split:     ", strings.Split("a-b-c-d-e", "-"))       // Split:      [a b c d e]
-	ptr("ToLower:   ", strings.ToLower("TEST"))               // ToLower:    test
-	ptr("ToUpper:   ", strings.ToUpper("test"))               // ToUpper:    TEST
+	ptr(
+		// true
+		strings.Contains("test", "es"),
+		// 2
+		strings.Count("test", "t"),
+		// true
+		strings.HasPrefix("test", "te"),
+		// true
+		strings.HasSuffix("test", "st"),
+		// 1
+		strings.Index("test", "e"),
+		// a-b
+		strings.Join([]string{"a", "b"}, "-"),
+		// aaaaa
+		strings.Repeat("a", 5),
+		// f00. replace all.
+		strings.Replace("foo", "o", "0", -1),
+		// f0o. replace one character.
+		strings.Replace("foo", "o", "0", 1),
+		// [a b c d e]
+		strings.Split("a-b-c-d-e", "-"),
+		// test
+		strings.ToLower("TESt"),
+		// TEST
+		strings.ToUpper("tesT"),
+	)
 }
