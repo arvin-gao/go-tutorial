@@ -116,3 +116,53 @@ func TestIntOverflow(t *testing.T) {
 	ptr("f2 + 1 =", f2+1)
 	ptr("f2 + f2 =", f2+f2)
 }
+
+// TODO: tidy.
+/*
+An interface value with a nil non-interface dynamic value is not a nil interface.
+So the function f always return a non-nil interface value.
+
+A call to the new builtin function always returns a pointer pointing to a zero value.
+That means dereferencing the pointer results in a zero value.
+The zero value of the *int type is nil.
+*/
+var x = *new(*int)
+var y *int = nil
+
+func f() interface{} {
+	return y
+}
+
+func TestFuncNil(t *testing.T) {
+	g := f()
+	if g == nil {
+		if x == nil {
+			ptr("A")
+		} else {
+			ptr("B")
+		}
+	} else {
+		if x == nil {
+			ptr("C")
+		} else {
+			ptr("D")
+		}
+	}
+}
+
+// ----------------------------------------------------------------
+
+/*
+The nil in f(nil...) is treated as a nil slice (of type []interface{}).
+The nil in f(nil) is treated as an element in a slice. That is equivalent to f([]interface{}{nil}...).
+The call f() is equivalent to f(nil...).
+*/
+func TestInterfaceSlice(t *testing.T) {
+	f := func(v ...interface{}) {
+		ptr("val len:", len(v))
+	}
+
+	f()
+	f(nil)
+	f(nil...)
+}

@@ -17,6 +17,13 @@ func ptr(v ...any) {
 	fmt.Println(v...)
 }
 
+func ptrs(v ...any) {
+	for i := 0; i < len(v); i++ {
+		fmt.Print(ptrPrefix)
+		fmt.Println(v[i])
+	}
+}
+
 // ptrf() is an alias for fmt.Printf() function.
 func ptrf(format string, v ...any) {
 	fmt.Printf(ptrPrefix+strings.TrimSpace(format)+"\n", v...)

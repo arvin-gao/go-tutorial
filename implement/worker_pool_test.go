@@ -7,6 +7,8 @@ import (
 	"runtime"
 	"sync"
 	"testing"
+
+	"github.com/sirupsen/logrus"
 )
 
 func TestWorkerPool(t *testing.T) {
@@ -16,63 +18,67 @@ func TestWorkerPool(t *testing.T) {
 type TaskFunc func(ctx context.Context) error
 
 func WorkerPool() {
-	tasks := make([]TaskFunc, 0, 100)
-	for i := 0; i < 100; i++ {
-		func(val int) {
-			tasks = append(tasks, func(ctx context.Context) error {
-				fmt.Println(val)
-				if val == 51 {
+	tasks := make([]TaskFunc, 100)
+	for i := 0; i < len(tasks); i++ {
+		func(index int) {
+			tasks[index] = func(ctx context.Context) error {
+				fmt.Println(index)
+				if index == 51 {
 					return errors.New("missing")
 				}
 				return nil
-			})
+			}
 		}(i)
 	}
 
-	err := ExecuteAll(0, tasks...)
-	if err == nil {
-		fmt.Println("missing error")
+	if err := ExecuteAll(0, tasks...); err != nil {
+		logrus.Error(err)
 	}
 }
 
+// numCPU is runtime.NumCPU() if the numCPU is zero.
 func ExecuteAll(numCPU int, tasks ...TaskFunc) error {
-	var err error
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	wg := sync.WaitGroup{}
-	wg.Add(len(tasks))
+	var err error
 
 	if numCPU == 0 {
 		numCPU = runtime.NumCPU()
 	}
-	fmt.Println("numCPU:", numCPU)
-	queue := make(chan TaskFunc, numCPU)
+
+	var wg sync.WaitGroup
+	wg.Add(numCPU)
+
+	queue := make(chan TaskFunc, len(tasks))
 
 	// Spawn the executer
 	for i := 0; i < numCPU; i++ {
 		go func() {
-			for task := range queue {
-				fmt.Println("get task")
-				if err == nil {
-					taskErr := task(ctx)
-					if taskErr != nil {
+			defer wg.Done()
+			for {
+				select {
+				case task, ok := <-queue:
+					if ctx.Err() != nil || !ok {
+						return
+					}
+					println("get task")
+					if taskErr := task(ctx); taskErr != nil {
 						err = taskErr
 						cancel()
 					}
+				case <-ctx.Done():
+					return
 				}
-				wg.Done()
 			}
 		}()
 	}
 
-	// Add tasks to queue
 	for _, task := range tasks {
 		queue <- task
 	}
 	close(queue)
 
-	// wait for all task done
 	wg.Wait()
 	return err
 }

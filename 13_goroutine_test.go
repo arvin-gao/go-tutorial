@@ -1,6 +1,8 @@
 package gotutorial
 
 import (
+	"context"
+	"fmt"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -567,4 +569,132 @@ func TestLockIncreaseCountByAtomic(t *testing.T) {
 	wg.Wait()
 
 	ptr("ops:", ops)
+}
+
+// TODO
+func TestSearchExample(t *testing.T) {
+	result := make(chan int, 4)
+	replicas := make([]replica, 4)
+	ctx, cancel := context.WithCancel(context.Background())
+	for i := 0; i < len(replicas); i++ {
+		go func(i int) {
+			result <- replicas[i].searchData(ctx, i)
+		}(i)
+	}
+	fmt.Println("search result:", <-result)
+	cancel()
+	time.Sleep(1 * time.Second)
+}
+
+type replica struct{}
+
+func (r replica) searchData(ctx context.Context, i int) int {
+	f := func(i int) <-chan int {
+		c := make(chan int, 1)
+		time.Sleep(time.Duration(100*(i+1)) * time.Millisecond)
+		c <- 1
+		return c
+	}
+	select {
+	case <-f(i):
+		fmt.Println("search done:", i)
+		return i
+	case <-ctx.Done():
+		fmt.Println("exit:", i)
+		return -1
+	}
+}
+
+type Result struct{}
+type ReplicaSearch func(string) Result
+
+func searchByReplicas(query string, replicas ...ReplicaSearch) Result {
+	c := make(chan Result)
+	done := make(chan struct{})
+	// defer close(done)
+	searchReplica := func(i int) {
+		select {
+		case c <- replicas[i](query):
+			ptr("search result: ", i)
+		case <-done:
+			ptr("done:", i)
+		case <-time.Tick(100 * time.Millisecond):
+			ptr("searching...")
+		}
+	}
+	for i := range replicas {
+		go searchReplica(i)
+	}
+	return <-c
+}
+
+// The result channel in the searchByReplicas() function is unbuffered.
+// This means that only the first goroutine returns.
+// All other goroutines are stuck trying to send their results.
+// This means if you have more than one replica each call will leak resources.
+// Solutions:
+//  1. Use a buffered result channel big enough to hold all results.
+//  2. Use a select statement with a default case and a buffered result channel
+//     that can hold one value.
+//     The default case ensures that the goroutines don't get stuck
+//     even when the result channel can't receive messages.
+func TestSearchByReplicas(t *testing.T) {
+	_ = func(query string, replicas ...ReplicaSearch) Result {
+		// unbuffered!
+		c := make(chan Result)
+		searchReplica := func(i int) {
+			c <- replicas[i](query)
+		}
+		for i := range replicas {
+			go searchReplica(i)
+		}
+		// That will stuck all other goroutines.
+		return <-c
+	}
+
+	//  Solution 1: Use a buffered result channel big enough to hold all results.
+	_ = func(query string, replicas ...ReplicaSearch) Result {
+		// Using the buffered result channel.
+		c := make(chan Result, len(replicas))
+		searchReplica := func(i int) {
+			c <- replicas[i](query)
+		}
+		for i := range replicas {
+			go searchReplica(i)
+		}
+		return <-c
+	}
+
+	//  Solution 2: Use a select statement with a default case and a buffered result channel
+	//  that can hold one value.
+	_ = func(query string, replicas ...ReplicaSearch) Result {
+		c := make(chan Result, 1)
+		searchReplica := func(i int) {
+			select {
+			case c <- replicas[i](query):
+			default:
+			}
+		}
+		for i := range replicas {
+			go searchReplica(i)
+		}
+		return <-c
+	}
+
+	// Solution 3: use a special cancellation channel to interrupt the workers.
+	_ = func(query string, replicas ...ReplicaSearch) Result {
+		c := make(chan Result)
+		done := make(chan struct{})
+		defer close(done)
+		searchReplica := func(i int) {
+			select {
+			case c <- replicas[i](query):
+			case <-done:
+			}
+		}
+		for i := range replicas {
+			go searchReplica(i)
+		}
+		return <-c
+	}
 }

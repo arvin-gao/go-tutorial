@@ -212,3 +212,44 @@ func TestObjectFeatures(t *testing.T) {
 /*
 abstract, interface
 */
+
+// TODO: tidy.
+/*
+1. Field C.A1.g and method C.B.g collide, so they are both not promoted.
+2. Method C.B.f gets promoted as C.f.
+3. Method C.m overrides C.A1.m.
+*/
+
+type A1 struct {
+	g int
+}
+
+func (A1) m() int {
+	return 1
+}
+
+type B int
+
+func (B) g() {}
+
+func (B) f() {}
+
+type C struct {
+	A1
+	B
+}
+
+func (C) m() int {
+	return 9
+}
+
+func TestEmbed(t *testing.T) {
+	var c interface{} = C{}
+	//  Method C.B.f gets promoted as C.f.
+	_, bf := c.(interface{ f() })
+	// Field C.A1.g and method C.B.g collide, so they are both not promoted.
+	_, bg := c.(interface{ g() })
+	// Method C.m overrides C.A1.m.
+	i := c.(interface{ m() int })
+	ptr(bf, bg, i.m())
+}

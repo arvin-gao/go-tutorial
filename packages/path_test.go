@@ -33,17 +33,26 @@ func TestPath(t *testing.T) {
 	ptr(path.Split("c:/windows/system/aaa.jpg"))
 
 	//* FilePath process.
-	ptr(filepath.IsAbs("c:\\wind\\aa\\bb\\b.txt"))                 // true
-	ptr(filepath.Abs("."))                                         // D:\Projects\path <nil>
-	ptr(filepath.Base("c:\\aa\\baa.exe"))                          // baa.exe
-	ptr(filepath.Clean("c:\\\\aa/c\\baa.exe"))                     // c:\aa\c\baa.exe
-	ptr(filepath.Clean("aa/c\\baa.exe"))                           // aa\c\baa.exe
-	ptr(filepath.Dir("aa/c\\baa.exe"))                             // aa\c
-	ptr(filepath.EvalSymlinks("./path.exe"))                       // path.exe <nil>. That can be used for file exists.
-	ptr(filepath.Ext("./path.exe"))                                // .exe
-	ptr(filepath.FromSlash("c:\\windows\\aa//bb/cc//path.exe"))    // c:\windows\aa\\bb\cc\\path.exe. '/' instead of '\\'
-	ptr(filepath.ToSlash("c:\\windows\\aa/bb/cc/path.exe"))        // c:/windows/aa/bb/cc/path.exe. '\\' instead of '/'
-	ptr(filepath.VolumeName("c:\\windows\\"))                      // c:
+	ptr(filepath.IsAbs("c:\\wind\\aa\\bb\\b.txt")) // true
+	// Check absolute representation of path
+	// "D:\Projects\path <nil>"
+	ptr(filepath.Abs("."))
+	// Get filename with extension.
+	// "baa.exe"
+	ptr(filepath.Base("c:\\aa\\baa.exe"))
+	ptr(filepath.Clean("c:\\\\aa/c\\baa.exe")) // c:\aa\c\baa.exe
+	ptr(filepath.Clean("aa/c\\baa.exe"))       // aa\c\baa.exe
+	// "aa\c"
+	ptr(filepath.Dir("aa/c\\baa.exe"))
+	ptr(filepath.EvalSymlinks("./path.exe")) // path.exe <nil>. That can be used for file exists.
+	// Get extension name with dot.
+	// ".exe"
+	ptr(filepath.Ext("./path.exe"))
+	ptr(filepath.FromSlash("c:\\windows\\aa//bb/cc//path.exe")) // c:\windows\aa\\bb\cc\\path.exe. '/' instead of '\\'
+	ptr(filepath.ToSlash("c:\\windows\\aa/bb/cc/path.exe"))     // c:/windows/aa/bb/cc/path.exe. '\\' instead of '/'
+	// Get volume name.
+	// "c:"
+	ptr(filepath.VolumeName("c:\\windows\\"))
 	ptr(filepath.Glob("c:\\windows\\*.exe"))                       // Get all of files with the 'exe' execution name
 	ptr(filepath.IsAbs("http://www.baidu.com/aa.jpg"))             // false
 	ptr(filepath.Join("a", "\\bb\\", "cc", "/d", "e\\", "ff.txt")) // a\bb\cc\d\e\ff.txt

@@ -104,6 +104,7 @@ func TestConcurrencyMap(t *testing.T) {
 	ptr(builtinMap["key"])
 }
 
+// TODO:
 func TestSyncMap(t *testing.T) {
 	var wg sync.WaitGroup
 

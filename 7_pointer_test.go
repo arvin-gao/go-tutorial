@@ -1,6 +1,7 @@
 package gotutorial
 
 import (
+	"fmt"
 	"testing"
 	"unsafe"
 )
@@ -32,6 +33,7 @@ func changeNonPtr(v int) { // v = 2 , &v = 0x3
 }
 
 func TestPointerSize(t *testing.T) {
+	f := func(s string, sizeOf uintptr) string { return fmt.Sprintf("%s size: %v byte", s, sizeOf) }
 	var (
 		user     User
 		str      string
@@ -45,15 +47,17 @@ func TestPointerSize(t *testing.T) {
 		num32Ptr *int32
 		num63Ptr *int64
 	)
-	ptr("User size:", unsafe.Sizeof(user), "byte")
-	ptr("string size:", unsafe.Sizeof(str), "byte")
-	ptr("int size:", unsafe.Sizeof(num), "byte")
-	ptr("int8 size:", unsafe.Sizeof(num8), "byte")
-	ptr("int16 size:", unsafe.Sizeof(num16), "byte")
-	ptr("int32 size:", unsafe.Sizeof(num32), "byte")
-	ptr("int64 size:", unsafe.Sizeof(num64), "byte")
-	ptr("*User size:", unsafe.Sizeof(userPtr), "byte")
-	ptr("*string size:", unsafe.Sizeof(strPtr), "byte")
-	ptr("*int32 size:", unsafe.Sizeof(num32Ptr), "byte")
-	ptr("*int64 size:", unsafe.Sizeof(num63Ptr), "byte")
+	ptrs(
+		f("User", unsafe.Sizeof(user)),       // 24 byte.
+		f("*User", unsafe.Sizeof(userPtr)),   // 8 byte.
+		f("string", unsafe.Sizeof(str)),      // 16 byte.
+		f("*string", unsafe.Sizeof(strPtr)),  // 8 byte.
+		f("int", unsafe.Sizeof(num)),         // 8 byte.
+		f("int8", unsafe.Sizeof(num8)),       // 1 byte.
+		f("int16", unsafe.Sizeof(num16)),     // 2 byte.
+		f("int32", unsafe.Sizeof(num32)),     // 4 byte.
+		f("*int32", unsafe.Sizeof(num32Ptr)), // 8 byte.
+		f("int64", unsafe.Sizeof(num64)),     // 8 byte.
+		f("*int64", unsafe.Sizeof(num63Ptr)), // 8 byte.
+	)
 }
