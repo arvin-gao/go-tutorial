@@ -5,9 +5,11 @@
 - [Go learn - sjwhitworth](https://github.com/sjwhitworth/golearn)
 
 ## TODO
+
 1. all constants are unaddressable.
 
 ## 推薦連結
+
 - [Managing Go installs](https://go.dev/doc/manage-install)
 - [Release History](https://go.dev/doc/devel/release)
 - [Go discover packages](https://pkg.go.dev/)
@@ -18,7 +20,7 @@
   - [Concurrency Patterns](https://go.dev/talks/2012/concurrency.slide)
   - [concurrency guide](https://github.com/luk4z7/go-concurrency-guide)
   - [Project layout](https://github.com/golang-standards/project-layout)
-  - 
+  -
 - Go cli commands
   - [Go tools](https://pkg.go.dev/cmd)
   - [Go cli Doc](https://pkg.go.dev/cmd/go)

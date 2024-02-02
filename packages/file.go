@@ -2,6 +2,7 @@ package packages
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -133,4 +134,29 @@ func FilePath(dir1, dir2, filename string) {
 	// ?
 	filepath.Rel("a/b", "a/b/t/file")
 	filepath.Rel("a/b", "a/c/t/file")
+}
+
+func CopyFile(src, dst string) (int64, error) {
+	sourceFileStat, err := os.Stat(src)
+	if err != nil {
+		return 0, err
+	}
+
+	if !sourceFileStat.Mode().IsRegular() {
+		return 0, fmt.Errorf("%s is not a regular file", src)
+	}
+
+	source, err := os.Open(src)
+	if err != nil {
+		return 0, err
+	}
+	defer source.Close()
+
+	destination, err := os.Create(dst)
+	if err != nil {
+		return 0, err
+	}
+	defer destination.Close()
+
+	return io.Copy(destination, source)
 }
