@@ -4,10 +4,6 @@
 - [Go in depth - go101](https://go101.org/article/101.html)
 - [Go learn - sjwhitworth](https://github.com/sjwhitworth/golearn)
 
-## TODO
-
-1. all constants are unaddressable.
-
 ## 推薦連結
 
 - [Managing Go installs](https://go.dev/doc/manage-install)
@@ -31,7 +27,7 @@
   - [Go-training - github](https://github.com/go-training/training)
 - Blogs
   - [AppleBOY](https://blog.wu-boy.com/)
-- Cheatsheet
+- Cheat-sheet
   - https://devhints.io/go
 - Vscode
   - [GOPATH](https://github.com/golang/vscode-go/blob/master/docs/gopath.md)

@@ -7,41 +7,37 @@ import (
 )
 
 func TestArray(t *testing.T) {
-	// init
-	var arr1 [2]int                             // [0,0]
-	var arr2 = [2]int{}                         // [0,0]
-	var arr3 = [2]int{1, 2}                     // [1,2]
-	var arr4 = [...]int{1, 2, 2, 3, 3, 4, 4, 5} // [1,2]
-	arr5 := [3][3]int{
+	// Initialize array.
+	var arr [2]int                           // [0,0], len:2 , cap:2
+	var _ = [2]int{}                         // [0,0], len:2 , cap:2
+	var _ = [2]int{1, 2}                     // [1,2], len:2 , cap:2
+	var _ = [...]int{1, 2, 2, 3, 3, 4, 4, 5} // [1,2], len:8 , cap:8
+	_ = [3][3]int{                           // [[1 2 3] [2 3 4] [3 4 5]], len: 3, cap: 3
 		{1, 2, 3},
 		{2, 3, 4},
 		{3, 4, 5},
 	}
-	ptrSubject("var arr1 [2]int")
-	ptr("val:", arr1)
-	ptr("len:", len(arr1))
-	ptr("cap:", cap(arr1))
-	ptrSubject("var arr2 = [2]int{}")
-	ptr("val:", arr2)
+	// Initialize values for specific array elements
+	_ = [5]int{1: 1, 3: 25} // [0 1 0 25 0], len:5 , cap:5
 
-	ptr("len:", len(arr2))
-	ptr("cap:", cap(arr2))
-	ptrSubject("var arr3 = [2]int{1, 2}")
-	ptr("val:", arr3)
-	ptr("len:", len(arr3))
-	ptr("cap:", cap(arr3))
-	ptrSubject("var arr4 = [...]int{1, 2, 2, 3, 3, 4, 4, 5}")
-	ptr("val:", arr4)
-	ptr("len:", len(arr4))
-	ptr("cap:", cap(arr4))
-	ptrSubject("arr5 := [3][3]int{ {1, 2, 3}, {2, 3, 4}, {3, 4, 5}}")
-	ptr("val:", arr5)
-	ptr("len:", len(arr5))
-	ptr("cap:", cap(arr5))
+	ptr("val:", arr)
+	ptr("len:", len(arr))
+	ptr("cap:", cap(arr))
+
+	// Copy array
+	x := [5]int{0, 5, 10, 15, 20}
+	// Copy array values
+	y := x
+	// Copy by reference
+	z := &x
+	x[0] = 1
+	ptrlnf("x:%p", &x[0])
+	ptrlnf("y:%p", &y[0])
+	ptrlnf("z:%p", &z[0])
 }
 
 func TestSlice(t *testing.T) {
-	// init
+	// Initialize slice.
 	var slice1 []int                      // nil
 	var slice2 = []int{}                  // []
 	var slice3 = []int{1, 2}              // [1,2] -> len: 2, cap: 2
@@ -59,17 +55,17 @@ func TestSlice(t *testing.T) {
 
 	var ss = []int{0, 1, 2, 3, 4, 5, 6, 7, 8}
 	ptrSubject("var ss = []int{0, 1, 2, 3, 4, 5, 6, 7, 8}")
-	ptrf("ss[:] -> %v", ss[:])
-	ptrf("ss[4:] -> %v", ss[4:])
-	ptrf("ss[:3] -> %v", ss[:3])
-	ptrf("ss[2:4] -> %v", ss[2:4])
+	ptrlnf("ss[:] -> %v", ss[:])
+	ptrlnf("ss[4:] -> %v", ss[4:])
+	ptrlnf("ss[:3] -> %v", ss[:3])
+	ptrlnf("ss[2:4] -> %v", ss[2:4])
 
 	var ss2 []int = nil
 	ptrSubject("var ss2 []int = nil")
-	ptrf("ss2 address is %p", ss2)
+	ptrlnf("ss2 address is %p", ss2)
 	ss2 = append(ss2, 1)
 	ptrSubject("ss2 = append(ss2, 1)")
-	ptrf("ss2 address is %p", ss2)
+	ptrlnf("ss2 address is %p", ss2)
 	// len cap
 	pTitle("init slice")
 	ptrSubject("var slice1 []int")
@@ -81,7 +77,7 @@ func TestSlice(t *testing.T) {
 	ptrSubject("var slice3 = []int{1, 2}")
 	ptr("val:", slice3)
 	ptrSliceLenAndCap(slice3)
-	ptrf("addr[0]: %p", &slice3[0])
+	ptrlnf("slice3[0]: %p", &slice3[0])
 	ptrSubject("var slice4 = make([]int, 2)")
 	ptr("val:", slice4)
 	ptrSliceLenAndCap(slice4)
@@ -95,23 +91,23 @@ func TestSlice(t *testing.T) {
 	ptrfTree("copy(slice7, slice3)")
 	ptr("val:", slice7)
 	ptrSliceLenAndCap(slice7)
-	ptrf("addr[0]: %p", &slice7[0])
+	ptrlnf("slice7[0]: %p", &slice7[0])
 	ptrSubject("slice8 := slice7[:len(slice7)-1]")
 	ptr("val:", slice8)
 	ptrSliceLenAndCap(slice8)
-	ptrf("addr[0]: %p", &slice8[0])
+	ptrlnf("slice8[0]: %p", &slice8[0])
 
 	pTitle("append()")
 	// TODO: 檢查 append 後的slice地址是否相同？.
 	s := make([]int, 2, 3)
 	ptrSubject("s := make([]int, 2, 3)")
-	ptrf("addr[0]: %p", &s[0])
+	ptrlnf("s[0]: %p", &s[0])
 	s = append(s, 1)
 	ptrSubject("s = append(s, 1)")
-	ptrf("addr[0]: %p", &s[0])
+	ptrlnf("s[0]: %p", &s[0])
 	s = append(s, 1)
 	ptrSubject("s = append(s, 1)")
-	ptrf("addr[0]: %p", &s[0])
+	ptrlnf("s[0]: %p", &s[0])
 
 	ptrSubject("slice1 = append([]int{}, []int{1,2,3}...)")
 	slice1 = append([]int{}, []int{1, 2, 3}...)
@@ -147,46 +143,64 @@ func TestSlice(t *testing.T) {
 	ptrfTree("slice1ByCopy := make([]int, 5)")
 	ptrfTree("copy(slice1ByCopy, slice1)")
 	ptrfTree("slice1[0] = 1")
-	ptrf("slice1[0]: %d, addr[0]: %p", slice1[0], &slice1[0])
-	ptrf("slice1BySlicingAll[0]: %d, addr[0]: %p", slice1BySlicingAll[0], &slice1BySlicingAll[0])
-	ptrf("slice1ByCopy[0]: %d, addr[0]: %p", slice1ByCopy[0], &slice1ByCopy[0])
+	ptrlnf("slice1[0]: %d, addr[0]: %p", slice1[0], &slice1[0])
+	ptrlnf("slice1BySlicingAll[0]: %d, addr[0]: %p", slice1BySlicingAll[0], &slice1BySlicingAll[0])
+	ptrlnf("slice1ByCopy[0]: %d, addr[0]: %p", slice1ByCopy[0], &slice1ByCopy[0])
 	slice1BySlicingAll = append(slice1BySlicingAll, 1)
 	slice1[0] = 2
 	ptrSubject("slice1BySlicingAll = append(slice1BySlicingAll, 1)")
 	ptrfTree("slice1[0] = 2")
-	ptrf("slice1[0]: %d, addr[0]: %p", slice1[0], &slice1[0])
-	ptrf("slice1BySlicingAll[0]: %d, addr[0]: %p", slice1BySlicingAll[0], &slice1BySlicingAll[0])
+	ptrlnf("slice1[0]: %d, addr[0]: %p", slice1[0], &slice1[0])
+	ptrlnf("slice1BySlicingAll[0]: %d, addr[0]: %p", slice1BySlicingAll[0], &slice1BySlicingAll[0])
 
 	changeFirstValue := func(s []int) {
 		s[0] = 100
 	}
 	slice1[0] = 1
 	ptrSubject("slice1[0] = 1")
-	ptrf("slice1[0]: %d, addr: %p", slice1[0], &slice1[0])
+	ptrlnf("slice1[0]: %d, addr: %p", slice1[0], &slice1[0])
 	changeFirstValue(slice1)
 	ptrSubject("changeFirstValue := func(s []int) { s[0] = 100 }")
 	ptrfTree("changeFirstValue(slice1)")
-	ptrf("slice1[0]: %d, addr: %p", slice1[0], &slice1[0])
+	ptrlnf("slice1[0]: %d, addr: %p", slice1[0], &slice1[0])
+}
+
+func RangeSlice() {
+	nums := []int{1, 2, 3}
+	// Basic loop.
+	for i := 0; i < len(nums); i++ {
+		// nums[i]
+	}
+
+	// Loop-of
+	for idx, num := range nums {
+		ptr(idx, num)
+	}
+
+	// Loop with increase index
+	i := 0
+	for range nums {
+		ptr(nums[i])
+		i++
+	}
 }
 
 func TestSliceAdvance(t *testing.T) {
-	pTitle("This behavior can lead to unexpected memory usage.")
+	// This behavior can lead to unexpected memory usage.
 	data := func() []int {
 		raw := make([]int, 10000)
-		ptrSubject("make slice")
-		ptr("len(raw):", len(raw))
-		ptr("cap(raw):", cap(raw))
-		ptr("&raw[0]:", &raw[0])
+		ptr("raw length:", len(raw))
+		ptr("raw capacity:", cap(raw))
+		ptrlnf("raw[0] address: %p", &raw[0])
 		return raw[:3]
 		// Solution.
 		// res := make([]int, 3)
 		// copy(res, raw[:3])
 		// return res
 	}()
-	ptrSubject("data")
-	ptr("len(data):", len(data)) // 3
-	ptr("cap(data):", cap(data)) // 10000
-	ptr("&data[0]:", &data[0])
+	ptr("data length:", len(data))   // 3
+	ptr("data capacity:", cap(data)) // 10000
+	ptrlnf("data[0] address: %p", &data[0])
 }
 
 func TestSliceExample1(t *testing.T) {

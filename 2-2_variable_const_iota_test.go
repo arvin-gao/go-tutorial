@@ -21,7 +21,7 @@ const (
 	_h            // 9
 )
 
-func Test(t *testing.T) {
+func TestIotaExample1(t *testing.T) {
 	ptr(_a)
 	ptr(_b)
 	ptr(_c)

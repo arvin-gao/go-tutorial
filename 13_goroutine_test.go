@@ -2,7 +2,6 @@ package gotutorial
 
 import (
 	"sync"
-	"sync/atomic"
 	"testing"
 	"time"
 	"unsafe"
@@ -11,7 +10,7 @@ import (
 )
 
 var (
-	unbuffCh = make(chan int)
+	unBuffCh = make(chan int)
 	buffCh   = make(chan int, 1)
 )
 
@@ -27,12 +26,24 @@ func TestGoroutine(t *testing.T) {
 	go f("f2")
 	go f("f3")
 	go f("f4")
-	ptr("sleeping...")
+
 	time.Sleep(time.Second)
 	ptr("done")
 }
 
-func TestGoroutineWithWaitGroup(t *testing.T) {
+func TestGoroutineExample1(t *testing.T) {
+	var v1 = 123
+	go func(v2 int) {
+		time.Sleep(time.Second)
+		ptr(v1, v2)
+	}(v1)
+
+	v1 = 789
+
+	time.Sleep(2 * time.Second)
+}
+
+func TestGoroutinesWithWaitGroup(t *testing.T) {
 	f := func(wg *sync.WaitGroup, str string) {
 		defer wg.Done()
 		time.Sleep(50 * time.Millisecond)
@@ -51,86 +62,63 @@ func TestGoroutineWithWaitGroup(t *testing.T) {
 	ptr("done")
 }
 
-func TestCounterWithMultiGoroutine(t *testing.T) {
-	var count int
-
-	f := func(wg *sync.WaitGroup, lock *sync.Mutex) {
-		defer wg.Done()
-
-		lock.Lock()
-		defer lock.Unlock()
-
-		count++
-	}
-
-	var wg sync.WaitGroup
-	loopCount := 100000
-
-	wg.Add(loopCount)
-
-	var lock sync.Mutex
-	for i := 0; i < loopCount; i++ {
-		go f(&wg, &lock)
-	}
-
-	wg.Wait()
-
-	assert.Equal(t, loopCount, count)
-}
-
-func TestCounterWithGoroutineAndLock(t *testing.T) {
+func TestGoroutinesWithLockAndWithoutLock(t *testing.T) {
 	var (
-		lock  sync.Mutex
-		count int
+		counterWithoutLock int
+		counterWithLock    int
 	)
 
-	f := func(wg *sync.WaitGroup, lock *sync.Mutex) {
+	withoutLockIncrease := func(wg *sync.WaitGroup) {
+		defer wg.Done()
+		counterWithoutLock++
+	}
+
+	withLockIncrease := func(wg *sync.WaitGroup, lock *sync.Mutex) {
 		defer wg.Done()
 
 		lock.Lock()
 		defer lock.Unlock()
 
-		count++
+		counterWithLock++
 	}
 
-	var wg sync.WaitGroup
+	var (
+		lock sync.Mutex
+		wg   sync.WaitGroup
+	)
 	loopCount := 100000
 
 	wg.Add(loopCount)
-
 	for i := 0; i < loopCount; i++ {
-		go f(&wg, &lock)
+		go withLockIncrease(&wg, &lock)
 	}
-
 	wg.Wait()
 
-	assert.Equal(t, loopCount, count)
-}
+	wg.Add(loopCount)
+	for i := 0; i < loopCount; i++ {
+		go withoutLockIncrease(&wg)
+	}
+	wg.Wait()
 
-func TestGoroutineExample(t *testing.T) {
-	var v1 = 123
-	go func(v2 int) {
-		time.Sleep(time.Second)
-		ptr(v1, v2)
-	}(v1)
+	ptr("counter with lock:", counterWithLock)
+	ptr("counter without lock:", counterWithoutLock)
 
-	v1 = 789
-
-	time.Sleep(2 * time.Second)
+	assert.Equal(t, loopCount, counterWithLock)
+	assert.NotEqual(t, loopCount, counterWithoutLock)
 }
 
 // Channels are the pipes that connect concurrent goroutines.
 // You can send values into channels from one goroutine and receive those values into another goroutine.
 
 /*
-	Unbuffered will only accept sends (chan <-) if there is a corresponding receive
+	unBuffered will only accept sends (chan <-) if there is a corresponding receive
 	(<- chan) ready to receive the sent value.
 	Buffered channels accept a limited number of values without a corresponding
 	receiver for those values.
 */
 
 /*
-unbuffered channel
+unBuffered channel
 	sender 會等待(ch <- value)
 	receiver 會等待(v, isOpen := <-ch)
 buffered channel
@@ -140,8 +128,8 @@ buffered channel
 
 func TestChannelWithDeadlock(t *testing.T) {
 	// fatal error: all goroutines are asleep - deadlock!
-	unbuffCh <- 1
-	ptr(<-unbuffCh)
+	unBuffCh <- 1
+	ptr(<-unBuffCh)
 }
 
 func TestChannelWithDeadlock2(t *testing.T) {
@@ -162,13 +150,13 @@ func TestChannelWithClose(t *testing.T) {
 }
 
 func TestChannelWithLoop(t *testing.T) {
-	for c := range unbuffCh {
+	for c := range unBuffCh {
 		ptr("1-for:", c)
 	}
 
 	// check the channel status.
 	for {
-		if c, open := <-unbuffCh; !open {
+		if c, open := <-unBuffCh; !open {
 			ptr("2-for:", c)
 		}
 	}
@@ -244,7 +232,7 @@ Go’s select lets you wait on multiple channel operations.
 Combining goroutines and channels with select is a powerful feature of Go.
 */
 func TestChannelWithSelect(t *testing.T) {
-	ptr("setup unbuffered channel")
+	ptr("setup unBuffered channel")
 	c1 := make(chan string)
 	c2 := make(chan string)
 
@@ -462,9 +450,9 @@ func TestChannelExample3(t *testing.T) {
 func TestWorkerWithGoroutineAndChannel(t *testing.T) {
 	worker := func(id int, jobs <-chan int, results chan<- int) {
 		for j := range jobs {
-			ptrf("worker-%d started  job-%d", id, j)
+			ptrlnf("worker-%d started  job-%d", id, j)
 			time.Sleep(time.Second)
-			ptrf("worker-%d finished  job-%d", id, j)
+			ptrlnf("worker-%d finished  job-%d", id, j)
 			results <- j * 2
 		}
 	}
@@ -488,7 +476,7 @@ func TestWorkerWithGoroutineAndChannel(t *testing.T) {
 }
 
 // example from https://blog.wu-boy.com/2022/05/read-data-from-channel-in-go/
-func TestGoroutineExample1(t *testing.T) {
+func TestGoroutineExample3(t *testing.T) {
 	str := []byte("foobar")
 
 	ch := make(chan byte, len(str))
@@ -544,27 +532,4 @@ func TestGoroutineExample1(t *testing.T) {
 	next <- struct{}{}
 
 	wg.Wait()
-}
-
-// TODO: .
-func TestLockIncreaseCountByAtomic(t *testing.T) {
-	var ops uint64
-
-	var wg sync.WaitGroup
-
-	for i := 0; i < 50; i++ {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			for c := 0; c < 1000; c++ {
-				// ops++ // normal increment.
-				atomic.AddUint64(&ops, 1) // lock increment.
-			}
-		}()
-	}
-
-	wg.Wait()
-
-	ptr("ops:", ops)
 }

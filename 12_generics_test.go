@@ -4,7 +4,6 @@ import (
 	"testing"
 )
 
-// TODO: .
 func MapKeys[K comparable, V any](m map[K]V) []K {
 	r := make([]K, 0, len(m))
 	for k := range m {
@@ -50,6 +49,5 @@ func TestGenerics(t *testing.T) {
 	lst := List[int]{}
 	lst.Push(10)
 	lst.Push(13)
-	lst.Push(23)
 	ptr("list:", lst.GetAll())
 }

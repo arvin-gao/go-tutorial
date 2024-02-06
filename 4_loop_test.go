@@ -2,45 +2,63 @@ package gotutorial
 
 import (
 	"testing"
+	"time"
 )
 
 func TestLoop(t *testing.T) {
-	i := 1
+	var i int
+
+	// Basic loop
+	for j := 7; j <= 15; j++ {
+		// Support `break` statement.
+		if i > 10 {
+			break
+		}
+		// Support `continue` statement.
+		if i == 5 {
+			continue
+		}
+	}
+
+	// Infinite loop
+	for {
+		break
+	}
+	// Infinite loop.
+	// Similar to `for i := 0; true; i++`
+	for i := 0; ; i++ {
+		break
+	}
+
+	// While loop.
+	i = 0
 	for i <= 3 {
 		i = i + 1
 	}
-
-	for j := 7; j <= 9; j++ {
-	}
-
-	// endless loop
+	// While loop.
+	i = 0
 	for {
-		if i > 10 {
+		if i <= 3 {
 			break
 		}
 		i++
 	}
 
-	for n := 0; n <= 5; n++ {
-		if n%2 == 0 {
-			continue
-		}
-	}
-
-	for i := 0; ; i++ { // <=> for i := 0; true; i++ {
-	}
-
-}
-
-func TestLoopArrayAndSlice(t *testing.T) {
+	// Loop with range slice or array.
 	nums := []int{1, 2, 3}
-	for index, value := range nums {
-		ptr(index, value)
-		pPtr(&nums[index])
-		pPtr(&value)
+	// Get the index and value while looping through the range
+	for i, num := range nums {
+		ptrlnf("index:%d value:%d", i, num)
 	}
-	for index := range nums {
-		ptr(index)
+
+	// Only getting the index.
+	for i := range nums {
+		ptr(i)
+	}
+
+	// Only getting the value.
+	for _, num := range nums {
+		ptr(num)
 	}
 }
 
@@ -50,9 +68,6 @@ func TestLoopMap(t *testing.T) {
 		"2": "v2",
 		"3": "v3",
 		"4": "v4",
-		"5": "v5",
-		"6": "v6",
-		"7": "v7",
 	}
 	// 順序不一定
 	for key, value := range m {
@@ -65,8 +80,15 @@ func TestLoopMap(t *testing.T) {
 }
 
 func TestLoopChannel(t *testing.T) {
-	ch := make(chan string, 1)
-	ch <- "range channel"
+	ch := make(chan string)
+
+	// Close the channel to ensure process done.
+	go func() {
+		<-time.After(time.Second)
+		close(ch)
+	}()
+
+	ch <- "data"
 	for x := range ch {
 		ptr(x)
 	}

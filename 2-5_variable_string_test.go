@@ -36,36 +36,26 @@ func TestString(t *testing.T) {
 }
 
 func TestStringType(t *testing.T) {
-	// 修改字串 by index
+	// Modify the string by index
 	str := "abc"
 	c := []byte(str) // []byte{'c', 'b', 'c'}
 
-	ptr("origin string:", str)
-
 	c[0] = 'c'
+	ptr(string(c))
 
-	pCode("c[0] = 'c'")
-	ptrfTree("%s", c)
-
-	// 使用 for range
-	pTitle("for range the string")
-	pCode("for i, v := range \"abc\"")
+	// Ranges the string.
 	for i, v := range "abc" {
 		ptr(i, v)
 	}
 
-	// 計算長度
-	pTitle("string length")
-	str = "你好 abc"
-	pCode("str = \"你好 abc\"")
-	ptrfTree("len(str): %d", len(str))
-	ptrfTree("len([]rune(str)): %d", len([]rune(str)))
-	ptrfTree("utf8.RuneCountInString(str): %d", utf8.RuneCountInString(str))
+	// String length.
+	str = "中文 abc"
+	ptrlnf("len(str): %d", len(str))
+	ptrlnf("len([]rune(str)): %d", len([]rune(str)))
+	ptrlnf("utf8.RuneCountInString(str): %d", utf8.RuneCountInString(str))
 
-	// 連接字串
-	pTitle("string concatenation")
-	pCode("str =\"\"")
-	pCode("str +=\"abc\"")
+	// String concatenation.
+	pTitle("String concatenation")
 	str = ""
 	str += "abc"
 	ptrfTree("str: %s", str)
@@ -127,7 +117,7 @@ func TestStringWithDecodeRune(t *testing.T) {
 	s := "hi 你好"
 	for i, w := 0, 0; i < len(s); i += w {
 		runeV, size := utf8.DecodeRuneInString(s[i:])
-		ptrf("%#U starts at %d, size: %d\n", runeV, i, size)
+		ptrlnf("%#U starts at %d, size: %d\n", runeV, i, size)
 		w = size
 	}
 }

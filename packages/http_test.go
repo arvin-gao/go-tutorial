@@ -8,7 +8,7 @@ import (
 )
 
 func TestHttpClient(t *testing.T) {
-	resp, err := http.Get("https://gobyexample.com")
+	resp, err := http.Get("https://google.com")
 	if err != nil {
 		panic(err)
 	}
@@ -25,13 +25,13 @@ func TestHttpClient(t *testing.T) {
 		panic(err)
 	}
 }
+
 func TestHttpServer(t *testing.T) {
-	hello := func(w http.ResponseWriter, req *http.Request) {
+	helloRequest := func(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "hello\n")
 	}
 
 	headers := func(w http.ResponseWriter, req *http.Request) {
-
 		for name, headers := range req.Header {
 			for _, h := range headers {
 				fmt.Fprintf(w, "%v: %v\n", name, h)
@@ -39,8 +39,8 @@ func TestHttpServer(t *testing.T) {
 		}
 	}
 
-	http.HandleFunc("/hello", hello)
+	http.HandleFunc("/hello", helloRequest)
 	http.HandleFunc("/headers", headers)
 
-	http.ListenAndServe(":8090", nil)
+	http.ListenAndServe(":8080", nil)
 }

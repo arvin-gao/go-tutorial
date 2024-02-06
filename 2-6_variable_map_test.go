@@ -1,14 +1,16 @@
 package gotutorial
 
 import (
-	"sync"
 	"testing"
 )
 
-// TODO: map len and capacity.
 func TestMap(t *testing.T) {
+	// Declaring empty map
+	var _ = map[string]int{}
+	// Initializing a map
+	var _ = map[string]int{"A": 1, "B": 2}
+	// With make()
 	m1 := make(map[string]int)
-	// TODO:
 	m2 := make(map[int]string, 2)
 	m3 := make(map[any]User)
 
@@ -22,11 +24,11 @@ func TestMap(t *testing.T) {
 	// map length.
 	ptr("m2 length:", len(m2))
 	m2[1] = "a"
-	ptr("m2 length:", len(m2))
+	ptr("appended m2 length:", len(m2))
 
 	m3[true] = User{}
 
-	// check exist.
+	// Check the key is exist.
 	val := m22["k2"]
 	val, isExist := m22["k2"]
 	if isExist {
@@ -35,7 +37,7 @@ func TestMap(t *testing.T) {
 		ptr("non key, value:", val) // 0
 	}
 
-	// delete the key.
+	// Delete item by the key.
 	delete(m1, "k1")
 	ptr("k1 value:", m1["k1"])
 }
@@ -75,61 +77,5 @@ func TestChangeMapValue(t *testing.T) {
 	user1.Age = 12
 	m1["user1"] = user1
 
-	ptrf("%+v\n%+v", m1["user1"], m2["user1"])
-}
-
-// TODO: advance.
-func TestConcurrencyMap(t *testing.T) {
-	var wg sync.WaitGroup
-
-	builtinMap := make(map[string]int)
-
-	wg.Add(2)
-	// issue: fatal error: concurrent map writes
-	go func() {
-		defer wg.Done()
-		for i := 0; i < 1000; i++ {
-			builtinMap["key"]++
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		for i := 0; i < 2000; i++ {
-			builtinMap["key"]++
-		}
-	}()
-
-	wg.Wait()
-	ptr(builtinMap["key"])
-}
-
-func TestSyncMap(t *testing.T) {
-	var wg sync.WaitGroup
-
-	// ?
-	var safeMap sync.Map
-	safeMap.Store("k1", "v1")
-	safeMap.Store("k2", "v2")
-	v, ok := safeMap.Load("k1")
-	ptr(v, ok)
-	return
-	wg.Add(2)
-	// issue: fatal error: concurrent map writes
-	go func() {
-		defer wg.Done()
-		for i := 0; i < 1000; i++ {
-			safeMap.Store("k1", "v1")
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		for i := 0; i < 2000; i++ {
-			// safeMap.Swap(key any, value any)
-		}
-	}()
-
-	wg.Wait()
-
+	ptrlnf("%+v\n%+v", m1["user1"], m2["user1"])
 }

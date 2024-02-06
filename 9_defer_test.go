@@ -10,6 +10,25 @@ Defer is used to ensure that a function call is performed
 later in a program’s execution, usually for purposes of cleanup.
 */
 // FILO. First in last out.
+func TestBasicDefer(t *testing.T) {
+	executePanic()
+	ptr("done")
+}
+
+func executePanic() {
+	// Defer function call
+	defer recoveryFunction()
+	panic("Panic")
+	ptr("executePanic function done")
+}
+
+func recoveryFunction() {
+	// Recover from panic and print erro message
+	if recoveryMessage := recover(); recoveryMessage != nil {
+		ptr(recoveryMessage)
+	}
+	ptr("Recovery function done")
+}
 
 func TestDeferExample1(t *testing.T) {
 	enter("example")

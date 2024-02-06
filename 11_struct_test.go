@@ -8,86 +8,105 @@ import (
 	"unsafe"
 )
 
-type MyStructure struct {
-	MySecondStructure
+type StructA struct {
+	// Nested Struct
+	StructB
 	Field1 string
 	Field2 string
-	Field3 string
 }
 
-type MySecondStructure struct {
+type StructB struct {
 	count int
 }
 
-func (m *MySecondStructure) Count() {
-	m.count++
+func (s *StructB) Count() {
+	s.count++
 }
 
-func (m MySecondStructure) Count2() {
-	m.count++ // ineffective assignment to field MySecondStructure.count
+func (s StructB) Count2() {
+	// ineffective assignment to field MySecondStructure.count
+	s.count++
 }
 
 func TestStruct(t *testing.T) {
-	var s MyStructure
-	s2 := MyStructure{
-		MySecondStructure: MySecondStructure{
+	// Creating an instance of a struct
+	var s1 StructA
+	s1.Field1 = "v"
+
+	// Creating an instance using struct literate
+	s2 := StructA{
+		StructB: StructB{
 			count: 1,
 		},
-		Field1: "v1",
-		Field2: "v2",
-		Field3: "v3",
+		Field2: "v",
 	}
-	ptr(s2.Field1, s2.Field2, s2.Field3, s2.count)
 
-	pass(s, s2)
+	// Creating an instance using the new keyword
+	_ = new(StructA)
+
+	// Creating an instance using the pointer address operator
+	_ = &StructA{Field1: "x"}
+
+	// Compare struct instances
+	ptr("s1 == s2", s1 == s2)
 }
 
 func TestDuplicatedField(t *testing.T) {
-	type A struct{ a int }
+	type A struct{ a, c int }
 	type B struct{ a, b int }
 
-	type C struct {
+	type S1 struct {
 		A
 		B
 		b float32
 	}
-	var c C
-	c.A.a = 1
-	c.B.a = 1
-	ptr(c)
-	// println(c.a) // error!
+	var s S1
+	s.A.a = 1
+	s.B.a = 1
+	ptr(s) // {1, 0}, {1, 0}, 0
+	// ptr(c.a) // failed: ambiguous selector c.a
 
-	c.b = 2
-	ptr(c.b)
-	c.b = 1.1
-	ptr(c.b)
+	s.b = 2
+	s.c = 3
+	ptr(s.b, s.B.b, s.c, s.A.c) // 2, 0, 3, 3
+	s.b = 4
+	s.A.c = 5
+	ptr(s.b, s.B.b, s.c, s.A.c) // 2, 0
 }
 
 func TestStructTag(t *testing.T) {
-	type _User struct {
-		ID     int64  `json:"iD"`
-		Name   string `json:"name1"`
-		Age    int
+	type UserA struct {
+		// json tag
+		ID   int64  `json:"iD"`
+		Name string `json:"name1"`
+		// non tag
+		Age int
+		// 3rd tag
 		Gender bool `gorm:"gender"`
 	}
 
-	var u = _User{
+	var user = UserA{
 		ID:   1,
 		Name: "user1",
 		Age:  10,
 	}
 
-	b, _ := json.MarshalIndent(&u, "", "\t")
+	// To generate json string from an object.
+	b, _ := json.MarshalIndent(&user, "", "\t")
 	ptr(string(b))
 
-	// 取得 tag value
-	field, ok := reflect.TypeOf(u).FieldByName("Name")
+	// To generate a object from json string.
+	var user2 UserA
+	_ = json.Unmarshal(b, &user2)
+
+	// Get tag value by reflect package.
+	field, ok := reflect.TypeOf(user).FieldByName("Name")
 	if ok {
 		fmt.Printf("field.tag: %s; Json value: %s\n", field.Tag, field.Tag.Get("json"))
 	}
 
 	ptr("===")
-	uType := reflect.TypeOf(u)
+	uType := reflect.TypeOf(user)
 	for i := 0; i < uType.NumField(); i++ {
 		field := uType.Field(i)
 		if field.Tag == "" {
@@ -106,7 +125,6 @@ func TestStructTag(t *testing.T) {
 			ptrfTree("tag: %s", field.Tag)
 			ptrfTree("value: %s", v)
 		}
-
 	}
 }
 
@@ -172,7 +190,7 @@ type A struct {
 	Value int
 }
 
-func (a *A) Amethod() {
+func (a *A) MethodA() {
 	fmt.Println("a method")
 }
 
@@ -197,18 +215,5 @@ func TestObjectFeatures(t *testing.T) {
 	mySportCar.Move()
 	mySportCar.Car.Move()
 	mySportCar.CarMethod()
-	mySportCar.MyA.Amethod() // not have mySportCar.Amethod() method on hint list.
+	mySportCar.MyA.MethodA() // not have mySportCar.MethodA() method on hint list.
 }
-
-// 封裝(Encapsulation)
-/*
-通過限制只有特定類別的物件可以存取這一特定類別的成員
-存取權限：public, private
-*/
-
-// 繼承(extends, override)
-
-// 多型(Polymorphism
-/*
-abstract, interface
-*/

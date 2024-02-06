@@ -24,8 +24,8 @@ func ptrs(v ...any) {
 	}
 }
 
-// ptrf() is an alias for fmt.Printf() function.
-func ptrf(format string, v ...any) {
+// ptrlnf() is an alias for fmt.Printf() function.
+func ptrlnf(format string, v ...any) {
 	fmt.Printf(ptrPrefix+strings.TrimSpace(format)+"\n", v...)
 }
 
@@ -80,6 +80,6 @@ func ptrfTree(format string, v ...any) {
 }
 
 func ptrSliceLenAndCap(slice []int) {
-	ptrf("len: %d", len(slice))
-	ptrf("cap: %d", cap(slice))
+	ptrlnf("len: %d", len(slice))
+	ptrlnf("cap: %d", cap(slice))
 }

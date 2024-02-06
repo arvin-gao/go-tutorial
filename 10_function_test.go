@@ -6,20 +6,22 @@ import (
 )
 
 func TestFunction(t *testing.T) {
-	pTitle("call simple functions ")
-
+	// Call simple functions
 	simpleFunc(1, 2, "v3 string", "str2")
 
+	// Passing multiple values using a variadic function.
 	slice := []string{"str1", "str2"}
 	simpleFunc(1, 2, "v3", slice...)
+	simpleFunc(1, 2, "v4", []string{"str3", "str4"}...)
+	simpleFunc(1, 2, "v4", "str4", "str5")
 
+	// Function return multiple values.
 	v1, v2 := simpleFunc2()
 	ptr(v1, v2)
-	ptr(simpleFunc2())
 
-	pTitle("匿名函式")
+	// Anonymous function
 	func() {
-		ptr("1")
+		ptr("Anonymous function")
 	}()
 
 	func1 := func(x int) int {
@@ -32,17 +34,25 @@ func TestFunction(t *testing.T) {
 	}(3)
 	ptr(vByFunc)
 
-	pTitle("Function arg")
-	sendFunc(func(x int) int {
-		ptr("this is my x:", x)
+	// The function value as param of function call.
+	printFWithTen(func(x int) int {
 		return x + 123
 	})
 
-	// 閉包
-	pTitle("Closures")
-	f := closures()
+	// Closure function(閉包)
+	pTitle("Closure function")
+	f := closureFunction()
 	ptr("f(1):", f(1))
 	ptr("f(2):", f(2))
+
+	// Closure function 2
+	l := 10
+	b := 10
+	func() {
+		var area int
+		area = l * b
+		ptr(area)
+	}()
 
 	// 遞迴
 	pTitle("Recursion")
@@ -58,12 +68,12 @@ func TestFunctionWithCondition(t *testing.T) {
 	}
 }
 
-func closures() func(b int) int {
+func closureFunction() func(b int) int {
 	var num int
-	ptr("closure init, num address:", &num)
+	ptrlnf("num(outside) address: %p", &num)
 	return func(n int) int {
 		num++
-		ptrf("num(%p): %d", &num, num)
+		ptrlnf("num(inside) address:%p. value: %d", &num, num)
 		return num + n
 	}
 }
@@ -76,7 +86,7 @@ func fib(n int) int {
 	return fib(n-1) + fib(n-2)
 }
 
-func sendFunc(f func(int) int) {
+func printFWithTen(f func(int) int) {
 	ptr(f(10))
 }
 

@@ -218,6 +218,7 @@ out:
 	// * Question 2: What happens to running the code below and how to resolves the problem?
 	var v1 interface{} = "s"
 	if v1, ok := v1.(int); ok {
+		// pass
 	} else {
 		// ? What result?
 		println(v1)
@@ -225,17 +226,17 @@ out:
 	// ? Solution
 }
 
-type dataWithReciver struct {
+type dataWithReceiver struct {
 	name string
 }
 
-func (p *dataWithReciver) print() { println(p.name) }
+func (p *dataWithReceiver) print() { println(p.name) }
 
-type dataWithoutReciver struct {
+type dataWithoutReceiver struct {
 	name string
 }
 
-func (p dataWithoutReciver) print() { println(p.name) }
+func (p dataWithoutReceiver) print() { println(p.name) }
 
 type printer interface {
 	print()
@@ -243,16 +244,16 @@ type printer interface {
 
 func TestAddressTraining(t *testing.T) {
 	// * Question 1: What happens the code below?
-	// var _ printer = dataWithReciver{}
-	// var _ printer = dataWithoutReciver{}
-	// var _ printer = &dataWithReciver{}
-	// Map with a struct with reciver function.
+	// var _ printer = dataWithReceiver{}
+	// var _ printer = dataWithoutReceiver{}
+	// var _ printer = &dataWithReceiver{}
+	// Map with a struct with Receiver function.
 
 	// * Question 2
-	m1 := map[string]dataWithoutReciver{"key": {"a"}}
+	m1 := map[string]dataWithoutReceiver{"key": {"a"}}
 	m1["key"].print()
 	// * What happens the code?
-	// m2 := map[string]dataWithReciver{"key": dataWithReciver{"a"}}
+	// m2 := map[string]dataWithReceiver{"key": dataWithReceiver{"a"}}
 	// m2["key"].print()
 
 	// * What happens the code?
