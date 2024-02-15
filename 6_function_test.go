@@ -2,37 +2,39 @@ package gotutorial
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 )
 
 func TestFunction(t *testing.T) {
 	// Call simple functions
-	simpleFunc(1, 2, "v3 string", "str2")
+	simpleFunc(1, 2, "one", "s1")
 
 	// Passing multiple values using a variadic function.
-	slice := []string{"str1", "str2"}
-	simpleFunc(1, 2, "v3", slice...)
-	simpleFunc(1, 2, "v4", []string{"str3", "str4"}...)
-	simpleFunc(1, 2, "v4", "str4", "str5")
+	slice := []string{"s1", "s2"}
+	simpleFunc(1, 2, "two", slice...)
+	simpleFunc(1, 2, "three", []string{"s1", "s2"}...)
+	simpleFunc(1, 2, "four", "s1", "s2")
 
 	// Function return multiple values.
-	v1, v2 := simpleFunc2()
-	ptr(v1, v2)
+	_, _ = returnDefinedVariable()
 
 	// Anonymous function
 	func() {
-		ptr("Anonymous function")
+		// Do something there.
 	}()
 
-	func1 := func(x int) int {
+	// Define a function to the variable.
+	vF1 := func(x int) int {
 		return x + 1
 	}
-	ptr(func1(2))
+	ptr(vF1(10))
 
-	vByFunc := func(x int) int {
+	// Call a anonymous function and return a value to the variable.
+	v := func(x int) int {
 		return x + 1
 	}(3)
-	ptr(vByFunc)
+	ptr(v)
 
 	// The function value as param of function call.
 	printFWithTen(func(x int) int {
@@ -40,12 +42,6 @@ func TestFunction(t *testing.T) {
 	})
 
 	// Closure function(閉包)
-	pTitle("Closure function")
-	f := closureFunction()
-	ptr("f(1):", f(1))
-	ptr("f(2):", f(2))
-
-	// Closure function 2
 	l := 10
 	b := 10
 	func() {
@@ -54,9 +50,32 @@ func TestFunction(t *testing.T) {
 		ptr(area)
 	}()
 
-	// 遞迴
-	pTitle("Recursion")
-	ptr("fib(7):", fib(3))
+	// Closure function-2
+	closureFunction := func() func(b int) {
+		num := 2
+		ptrlnf("num(outside) address:%p. value: %d", &num, num)
+		return func(n int) {
+			num += n
+			ptrlnf("num(inside)  address:%p. value: %d", &num, num)
+		}
+	}
+	closureFunction2 := closureFunction()
+	closureFunction2(1) // 3
+	closureFunction2(1) // 4
+	closureFunction2(2) // 6
+
+	// Recursion from function
+	_ = fib(3)
+
+	// Recursion from Closure function
+	var fib2 func(n int) int
+	fib2 = func(n int) int {
+		if n < 2 {
+			return n
+		}
+		return fib2(n-1) + fib2(n-2)
+	}
+	_ = fib2(10)
 }
 
 func TestFunctionWithCondition(t *testing.T) {
@@ -65,16 +84,6 @@ func TestFunctionWithCondition(t *testing.T) {
 	}
 	if err := f(); err != nil {
 		panic(err)
-	}
-}
-
-func closureFunction() func(b int) int {
-	var num int
-	ptrlnf("num(outside) address: %p", &num)
-	return func(n int) int {
-		num++
-		ptrlnf("num(inside) address:%p. value: %d", &num, num)
-		return num + n
 	}
 }
 
@@ -93,16 +102,17 @@ func printFWithTen(f func(int) int) {
 func simpleFunc(v, v2 int, v3 string, strSlice ...string) (int, int, string) {
 	x := v + 1
 	y := v2 + 2
-	z := v3 + "hi"
+	z := v3
 
+	fmt.Print(v3, ":")
 	for _, v := range strSlice {
-		ptr(v)
+		fmt.Print(" ", v)
 	}
-
+	ptr()
 	return x, y, z
 }
 
-func simpleFunc2() (x, y int) {
+func returnDefinedVariable() (x, y int) {
 	x = 1
 	y = 2
 	return // 也可直接使用 return 1, 2
@@ -111,10 +121,10 @@ func simpleFunc2() (x, y int) {
 func TestAliasFunction(t *testing.T) {
 	var p = ptr
 
-	myFunc := func() {
-		p("my function")
+	f := func() {
+		p("f")
 	}
 
-	var f = myFunc
-	f()
+	var f2 = f
+	f2()
 }
