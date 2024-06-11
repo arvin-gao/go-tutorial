@@ -70,3 +70,27 @@ func TestDeferExample2(t *testing.T) {
 	b = 4
 	ptr("step-2")
 }
+
+type Slice []int
+
+func NewSlice() Slice {
+	return make(Slice, 0)
+}
+
+func (s *Slice) Add(elem int) *Slice {
+	*s = append(*s, elem)
+	fmt.Print(elem)
+	return s
+}
+
+func TestDeferExample3(t *testing.T) {
+	s := NewSlice()
+	func() {
+		defer func() {
+			s.Add(1).Add(2)
+		}()
+		s.Add(3)
+		fmt.Println(s)
+	}()
+	fmt.Println(s)
+}
